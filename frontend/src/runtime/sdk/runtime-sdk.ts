@@ -290,7 +290,7 @@ export class AIRuntimeSDK {
   async stream(
     prompt: string,
     modelId: string,
-    agentMode: string,
+    agentMode: import("@/types/nexus").AgentMode,
     workspaceId: string,
     streamManager: StreamManager
   ): Promise<void> {
