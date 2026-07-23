@@ -21,11 +21,11 @@ export function MCPManager() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-            <Cpu className="h-5 w-5 text-cyan-400" />
+          <h2 className="text-lg font-bold text-nexus-50 flex items-center gap-2">
+            <Cpu className="h-5 w-5 text-nexus-accent" />
             Model Context Protocol (MCP) Runtime Manager
           </h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-nexus-400">
             Connected MCP servers, JSON-RPC 2.0 SSE/WebSocket transports, and heartbeats.
           </p>
         </div>
@@ -48,29 +48,29 @@ export function MCPManager() {
         {servers.map((srv) => (
           <div
             key={srv.id}
-            className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition-all space-y-4 text-xs"
+            className="p-5 rounded-2xl bg-nexus-850/60 border border-nexus-border hover:border-nexus-border transition-all space-y-4 text-xs"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center">
+                <div className="h-9 w-9 rounded-xl bg-cyan-500/20 text-nexus-accent border border-nexus-accent/30 flex items-center justify-center">
                   <Server className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-100 text-sm">{srv.name}</h3>
-                  <p className="text-[10px] font-mono text-slate-500">{srv.serverUrl}</p>
+                  <h3 className="font-bold text-nexus-50 text-sm">{srv.name}</h3>
+                  <p className="text-[10px] font-mono text-nexus-500">{srv.serverUrl}</p>
                 </div>
               </div>
 
               <Badge variant="emerald" className="uppercase font-mono text-[10px] flex items-center gap-1">
-                <Radio className="h-3 w-3 animate-pulse text-emerald-400" />
+                <Radio className="h-3 w-3 animate-pulse text-nexus-emerald" />
                 {srv.status}
               </Badge>
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-slate-800/80 font-mono text-[11px]">
-              <span className="text-slate-400">Transport: <span className="text-cyan-400 uppercase">{srv.transportType}</span></span>
-              <span className="text-slate-400">Latency: <span className="text-emerald-400">{srv.latencyMs} ms</span></span>
-              <span className="text-slate-400">v{srv.version}</span>
+            <div className="flex items-center justify-between pt-3 border-t border-nexus-border/80 font-mono text-[11px]">
+              <span className="text-nexus-400">Transport: <span className="text-nexus-accent uppercase">{srv.transportType}</span></span>
+              <span className="text-nexus-400">Latency: <span className="text-nexus-emerald">{srv.latencyMs} ms</span></span>
+              <span className="text-nexus-400">v{srv.version}</span>
             </div>
           </div>
         ))}

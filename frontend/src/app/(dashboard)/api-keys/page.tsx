@@ -40,11 +40,11 @@ export default function APIKeysPage() {
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <KeyRound className="h-6 w-6 text-cyan-400" />
+          <h1 className="text-2xl font-bold text-nexus-50 tracking-tight flex items-center gap-2">
+            <KeyRound className="h-6 w-6 text-nexus-accent" />
             API Key Management
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-sm text-nexus-400 mt-1">
             Programmatic API keys for automated agent execution, CI/CD deployments, and webhook integration.
           </p>
         </div>
@@ -57,20 +57,20 @@ export default function APIKeysPage() {
 
       <div className="space-y-4">
         {keys.map((k) => (
-          <div key={k.id} className="glass-panel p-5 rounded-2xl border border-slate-800 flex items-center justify-between">
+          <div key={k.id} className="nexus-glass rounded-2xl border border-nexus-border p-5 flex items-center justify-between hover:border-nexus-border-hover transition-all duration-200">
             <div className="space-y-1">
-              <div className="font-semibold text-slate-100 text-sm flex items-center gap-2">
+              <div className="font-semibold text-nexus-50 text-sm flex items-center gap-2">
                 <span>{k.name}</span>
-                <span className="font-mono text-xs text-cyan-400 font-bold">{k.keyPrefix}</span>
+                <span className="font-mono text-xs text-nexus-accent font-bold">{k.keyPrefix}</span>
               </div>
-              <div className="flex items-center gap-2 text-[11px] text-slate-400 font-mono">
+              <div className="flex items-center gap-2 text-xs text-nexus-400 font-mono">
                 <span>Created: {k.createdAt}</span>
                 <span>•</span>
                 <span>Scopes: {k.scopes.join(", ")}</span>
               </div>
             </div>
 
-            <Button variant="ghost" size="sm" onClick={() => handleRevoke(k.id)} className="text-rose-400 hover:text-rose-300">
+            <Button variant="ghost" size="sm" onClick={() => handleRevoke(k.id)} className="text-nexus-rose hover:text-nexus-rose/80">
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
@@ -79,16 +79,16 @@ export default function APIKeysPage() {
 
       {/* Generate Key Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md glass-panel p-6 rounded-2xl border border-slate-800 space-y-4 shadow-2xl">
-            <h3 className="text-sm font-bold text-slate-100">Generate New API Key</h3>
+        <div className="fixed inset-0 bg-nexus-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md nexus-glass-elevated rounded-2xl border border-nexus-border p-6 space-y-4">
+            <h3 className="text-sm font-bold text-nexus-50">Generate New API Key</h3>
 
             {createdSecret ? (
               <div className="space-y-3">
-                <p className="text-xs text-amber-400 font-semibold">
+                <p className="text-xs text-nexus-amber font-semibold">
                   Save your secret key now! It will never be shown again.
                 </p>
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 font-mono text-xs text-cyan-400 break-all">
+                <div className="p-3 rounded-xl bg-nexus-850 border border-nexus-border font-mono text-xs text-nexus-accent break-all">
                   {createdSecret}
                 </div>
                 <Button
@@ -109,6 +109,7 @@ export default function APIKeysPage() {
                   placeholder="Key Name (e.g. Production Deployment)"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  variant="premium"
                   required
                 />
                 <div className="flex gap-3 pt-2">

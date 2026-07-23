@@ -22,10 +22,10 @@ export function OperationsDashboard() {
       {/* Top Header Bar */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100 flex items-center gap-2 tracking-tight">
-            <ShieldCheck className="h-5 w-5 text-cyan-400" /> Enterprise AI Operations Center & Quality Platform
+          <h1 className="text-xl font-bold text-nexus-50 flex items-center gap-2 tracking-tight">
+            <ShieldCheck className="h-5 w-5 text-nexus-accent" /> Enterprise AI Operations Center & Quality Platform
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-nexus-400 mt-1">
             Real-time telemetry, distributed tracing, automated evaluation engines, PII/prompt guardrails, cost tracking & prompt registry.
           </p>
         </div>
@@ -33,7 +33,7 @@ export function OperationsDashboard() {
         <button
           onClick={handleRunEval}
           disabled={isRunning}
-          className="px-4 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium text-xs flex items-center gap-2 shadow-glow transition-all disabled:opacity-50"
+          className="px-4 py-2 rounded-xl bg-gradient-to-r from-nexus-accent to-nexus-brand-light hover:from-nexus-accent hover:to-nexus-brand-light text-white font-medium text-xs flex items-center gap-2 shadow-glow transition-all disabled:opacity-50"
         >
           {isRunning ? <Activity className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />}
           {isRunning ? "Running Suite..." : "Run Full AI Evaluation Suite"}
@@ -45,19 +45,19 @@ export function OperationsDashboard() {
 
       {/* Evaluation Results Banner (If Executed) */}
       {evalResult && (
-        <div className="p-4 rounded-xl bg-gradient-to-r from-blue-950/80 via-slate-900 to-indigo-950/80 border border-cyan-500/30 glass-panel shadow-glow flex items-center justify-between text-xs">
+        <div className="p-4 rounded-xl bg-gradient-to-r from-nexus-950/80 via-nexus-850 to-nexus-950/80 border border-nexus-accent/30 nexus-glass shadow-glow flex items-center justify-between text-xs">
           <div className="flex items-center gap-3">
-            <Sparkles className="h-5 w-5 text-cyan-400 shrink-0" />
+            <Sparkles className="h-5 w-5 text-nexus-accent shrink-0" />
             <div>
-              <span className="font-bold text-slate-100 block">Evaluation Suite Completed Successfully</span>
-              <span className="text-slate-400">
-                MRR: <strong className="text-cyan-400">{evalResult.retrievalMetrics.mrr}</strong> | NDCG:{" "}
-                <strong className="text-blue-400">{evalResult.retrievalMetrics.ndcg}</strong> | Citation Coverage:{" "}
-                <strong className="text-emerald-400">{(evalResult.citationCoverage * 100).toFixed(1)}%</strong>
+              <span className="font-bold text-nexus-50 block">Evaluation Suite Completed Successfully</span>
+              <span className="text-nexus-400">
+                MRR: <strong className="text-nexus-accent">{evalResult.retrievalMetrics.mrr}</strong> | NDCG:{" "}
+                <strong className="text-nexus-accent">{evalResult.retrievalMetrics.ndcg}</strong> | Citation Coverage:{" "}
+                <strong className="text-nexus-emerald">{(evalResult.citationCoverage * 100).toFixed(1)}%</strong>
               </span>
             </div>
           </div>
-          <div className="text-right font-mono text-cyan-400 font-extrabold text-base">
+          <div className="text-right font-mono text-nexus-accent font-extrabold text-base">
             {(evalResult.evaluationRun.overallScore * 100).toFixed(1)}% Overall
           </div>
         </div>
@@ -65,13 +65,13 @@ export function OperationsDashboard() {
 
       {/* Main Tabbed Operations Interface */}
       <div className="space-y-4">
-        <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+        <div className="flex items-center gap-2 border-b border-nexus-border pb-2">
           <button
             onClick={() => setActiveTab("traces")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
               activeTab === "traces"
-                ? "bg-blue-600/20 text-blue-400 border border-blue-500/30 shadow-glow"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-nexus-accent/20 text-nexus-accent border border-nexus-accent/30 shadow-glow"
+                : "text-nexus-400 hover:text-nexus-200"
             }`}
           >
             <Layers className="h-4 w-4" /> Distributed Tracing Waterfall
@@ -81,8 +81,8 @@ export function OperationsDashboard() {
             onClick={() => setActiveTab("guardrails")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
               activeTab === "guardrails"
-                ? "bg-blue-600/20 text-blue-400 border border-blue-500/30 shadow-glow"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-nexus-accent/20 text-nexus-accent border border-nexus-accent/30 shadow-glow"
+                : "text-nexus-400 hover:text-nexus-200"
             }`}
           >
             <AlertTriangle className="h-4 w-4" /> Guardrails & Violations
@@ -92,8 +92,8 @@ export function OperationsDashboard() {
             onClick={() => setActiveTab("costs")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
               activeTab === "costs"
-                ? "bg-blue-600/20 text-blue-400 border border-blue-500/30 shadow-glow"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-nexus-accent/20 text-nexus-accent border border-nexus-accent/30 shadow-glow"
+                : "text-nexus-400 hover:text-nexus-200"
             }`}
           >
             <DollarSign className="h-4 w-4" /> Token & Cost Analytics
@@ -103,8 +103,8 @@ export function OperationsDashboard() {
             onClick={() => setActiveTab("prompts")}
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all ${
               activeTab === "prompts"
-                ? "bg-blue-600/20 text-blue-400 border border-blue-500/30 shadow-glow"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-nexus-accent/20 text-nexus-accent border border-nexus-accent/30 shadow-glow"
+                : "text-nexus-400 hover:text-nexus-200"
             }`}
           >
             <Sliders className="h-4 w-4" /> Prompt Registry & A/B

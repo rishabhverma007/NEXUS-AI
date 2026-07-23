@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="antialiased bg-[#05070d] text-slate-100 min-h-screen">
+      <body className="antialiased bg-[#05070d] text-nexus-50 min-h-screen">
         <AppProviders>
           <CommandMenu />
           <ShortcutsModal />

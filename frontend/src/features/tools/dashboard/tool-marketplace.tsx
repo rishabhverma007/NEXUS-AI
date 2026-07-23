@@ -24,32 +24,32 @@ export function ToolMarketplace({ tools }: ToolMarketplaceProps) {
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-nexus-500" />
           <Input
             placeholder="Search enterprise tools, MCP servers, SQL connectors..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-9 bg-slate-900/60 border-slate-800 text-xs"
+            className="pl-9 bg-nexus-850/60 border-nexus-border text-xs"
           />
         </div>
 
-        <span className="text-xs text-slate-500 font-mono">Showing {filteredTools.length} Tools</span>
+        <span className="text-xs text-nexus-500 font-mono">Showing {filteredTools.length} Tools</span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredTools.map((tool) => (
           <div
             key={tool.id}
-            className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition-all space-y-4 text-xs"
+            className="p-5 rounded-2xl bg-nexus-850/60 border border-nexus-border hover:border-nexus-border transition-all space-y-4 text-xs"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center">
+                <div className="h-9 w-9 rounded-xl bg-indigo-500/20 text-nexus-brand-light border border-nexus-brand-light/30 flex items-center justify-center">
                   <Wrench className="h-4 w-4" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-100 text-sm">{tool.name}</h3>
-                  <p className="text-[10px] font-mono text-slate-500">v{tool.version}</p>
+                  <h3 className="font-bold text-nexus-50 text-sm">{tool.name}</h3>
+                  <p className="text-[10px] font-mono text-nexus-500">v{tool.version}</p>
                 </div>
               </div>
 
@@ -58,9 +58,9 @@ export function ToolMarketplace({ tools }: ToolMarketplaceProps) {
               </Badge>
             </div>
 
-            <p className="text-slate-300 text-xs">{tool.description}</p>
+            <p className="text-nexus-300 text-xs">{tool.description}</p>
 
-            <div className="flex items-center justify-between pt-3 border-t border-slate-800/80">
+            <div className="flex items-center justify-between pt-3 border-t border-nexus-border/80">
               <Badge variant="emerald" className="uppercase font-mono text-[10px]">
                 {tool.healthStatus}
               </Badge>

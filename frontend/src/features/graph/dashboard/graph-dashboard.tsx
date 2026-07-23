@@ -32,11 +32,11 @@ export function GraphDashboard() {
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <Network className="h-6 w-6 text-cyan-400" />
+          <h1 className="text-2xl font-bold text-nexus-50 tracking-tight flex items-center gap-2">
+            <Network className="h-6 w-6 text-nexus-accent" />
             Enterprise 3D Knowledge Graph Platform
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-nexus-400 mt-1">
             WebGL 3D force-directed graph, 2-Hop sub-graph traversal, and entity-relationship topology.
           </p>
         </div>
@@ -50,7 +50,7 @@ export function GraphDashboard() {
       <GraphHealthCard />
 
       <div className="flex gap-6 h-[500px]">
-        <div className="flex-1 glass-panel border border-slate-800 rounded-2xl overflow-hidden relative">
+        <div className="flex-1 nexus-glass border border-nexus-border rounded-2xl overflow-hidden relative">
           <GraphVisualizer3D onNodeSelect={handleNodeClick} />
         </div>
 

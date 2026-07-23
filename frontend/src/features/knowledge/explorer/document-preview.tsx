@@ -12,23 +12,23 @@ export function DocumentPreview({ document, onClose }: DocumentPreviewProps) {
   if (!document) return null;
 
   return (
-    <div className="flex-1 h-full glass-panel border border-slate-800 rounded-2xl p-6 flex flex-col justify-between overflow-hidden shadow-2xl">
-      <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+    <div className="flex-1 h-full nexus-glass border border-nexus-border rounded-2xl p-6 flex flex-col justify-between overflow-hidden shadow-2xl">
+      <div className="flex items-center justify-between pb-4 border-b border-nexus-border">
         <div className="flex items-center gap-2">
-          <FileText className="h-5 w-5 text-cyan-400" />
-          <h2 className="text-sm font-bold text-slate-100">{document.title} (Preview)</h2>
+          <FileText className="h-5 w-5 text-nexus-accent" />
+          <h2 className="text-sm font-bold text-nexus-50">{document.title} (Preview)</h2>
         </div>
-        <button onClick={onClose} className="text-slate-400 hover:text-slate-200 p-1 rounded hover:bg-slate-900">
+        <button onClick={onClose} className="text-nexus-400 hover:text-nexus-200 p-1 rounded hover:bg-nexus-850">
           <X className="h-4 w-4" />
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto my-4 p-4 rounded-xl bg-slate-950/80 border border-slate-900 font-mono text-xs text-slate-300 space-y-4">
-        <div className="text-cyan-400 font-bold"># {document.title}</div>
+      <div className="flex-1 overflow-y-auto my-4 p-4 rounded-xl bg-nexus-950/80 border border-nexus-border font-mono text-xs text-nexus-300 space-y-4">
+        <div className="text-nexus-accent font-bold"># {document.title}</div>
         <p>
           This document was parsed using **MarkdownParser** into structural chunks ready for multi-agent reasoning.
         </p>
-        <div className="p-3 rounded-lg bg-slate-900 border border-slate-800 text-slate-400">
+        <div className="p-3 rounded-lg bg-nexus-850 border border-nexus-border text-nexus-400">
           <code>
             // Prepared Structural Chunks (Token Estimate: 1,420 tokens)
             <br />

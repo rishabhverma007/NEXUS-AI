@@ -25,11 +25,11 @@ export function GraphRAGDashboard() {
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <Zap className="h-6 w-6 text-cyan-400" />
+          <h1 className="text-2xl font-bold text-nexus-50 tracking-tight flex items-center gap-2">
+            <Zap className="h-6 w-6 text-nexus-accent" />
             Enterprise GraphRAG Intelligence Engine
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-sm text-nexus-400 mt-1">
             Orchestrating Hybrid Retrieval + 3D Knowledge Graph + Long-Term Memory into graph-aware evidence payloads.
           </p>
         </div>
@@ -49,7 +49,7 @@ export function GraphRAGDashboard() {
       <GraphRAGMetrics />
 
       <div className="flex gap-6 h-[500px]">
-        <div className="flex-1 glass-panel border border-slate-800 rounded-2xl overflow-hidden relative">
+        <div className="flex-1 nexus-glass border border-nexus-border rounded-2xl overflow-hidden relative">
           <GraphVisualizer3D />
         </div>
 

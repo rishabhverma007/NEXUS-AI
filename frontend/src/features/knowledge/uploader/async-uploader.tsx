@@ -43,31 +43,31 @@ export function AsyncUploader({ onClose, collectionId }: AsyncUploaderProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-lg glass-panel p-6 rounded-3xl border border-slate-800 space-y-5 shadow-2xl">
-        <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+    <div className="fixed inset-0 bg-nexus-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-lg nexus-glass p-6 rounded-3xl border border-nexus-border space-y-5 shadow-2xl">
+        <div className="flex items-center justify-between pb-3 border-b border-nexus-border">
           <div className="flex items-center gap-2">
-            <Upload className="h-5 w-5 text-cyan-400" />
-            <h2 className="text-sm font-bold text-slate-100">Enterprise File Ingestion Pipeline</h2>
+            <Upload className="h-5 w-5 text-nexus-accent" />
+            <h2 className="text-sm font-bold text-nexus-50">Enterprise File Ingestion Pipeline</h2>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-200 p-1 rounded hover:bg-slate-900">
+          <button onClick={onClose} className="text-nexus-400 hover:text-nexus-200 p-1 rounded hover:bg-nexus-850">
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {isUploading ? (
           <div className="text-center py-8 space-y-4">
-            <Loader2 className="h-8 w-8 text-cyan-400 animate-spin mx-auto" />
-            <div className="text-sm font-bold text-slate-100">{stage}</div>
-            <p className="text-xs text-slate-400 font-mono">
+            <Loader2 className="h-8 w-8 text-nexus-accent animate-spin mx-auto" />
+            <div className="text-sm font-bold text-nexus-50">{stage}</div>
+            <p className="text-xs text-nexus-400 font-mono">
               Emitting runtime events to Global Event Bus...
             </p>
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="p-8 border-2 border-dashed border-slate-800 rounded-2xl text-center space-y-3 bg-slate-950/40">
-              <FileText className="h-8 w-8 text-slate-500 mx-auto" />
-              <div className="text-xs text-slate-300">
+            <div className="p-8 border-2 border-dashed border-nexus-border rounded-2xl text-center space-y-3 bg-nexus-950/40">
+              <FileText className="h-8 w-8 text-nexus-500 mx-auto" />
+              <div className="text-xs text-nexus-300">
                 Drag and drop PDF, DOCX, Markdown, CSV, HTML, or JSON files
               </div>
               <input
@@ -75,7 +75,7 @@ export function AsyncUploader({ onClose, collectionId }: AsyncUploaderProps) {
                 placeholder="Enter file name (e.g. System_Blueprint.md)"
                 value={fileName}
                 onChange={(e) => setFileName(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-nexus-850 border border-nexus-border rounded-xl px-3 py-2 text-xs text-nexus-50 focus:outline-none focus:border-cyan-500"
               />
             </div>
 

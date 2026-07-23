@@ -125,7 +125,7 @@ export function ChatView() {
   };
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-slate-950">
+    <div className="flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-nexus-950">
       {/* Main Conversation Stream */}
       <div className="flex-1 flex flex-col justify-between h-full relative">
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
@@ -140,9 +140,9 @@ export function ChatView() {
               }`}
             >
               {msg.role === "assistant" && (
-                <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 p-0.5 flex-shrink-0 shadow-glow">
-                  <div className="h-full w-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                    <BrainCircuit className="h-4 w-4 text-cyan-400" />
+                <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-nexus-accent to-nexus-brand-light p-0.5 flex-shrink-0 shadow-glow">
+                  <div className="h-full w-full bg-nexus-950 rounded-[10px] flex items-center justify-center">
+                    <BrainCircuit className="h-4 w-4 text-nexus-accent" />
                   </div>
                 </div>
               )}
@@ -150,8 +150,8 @@ export function ChatView() {
               <div
                 className={`rounded-2xl p-5 text-sm leading-relaxed max-w-2xl border ${
                   msg.role === "user"
-                    ? "bg-blue-600 text-white border-blue-500 shadow-glow"
-                    : "glass-panel border-slate-800 text-slate-100"
+                    ? "bg-nexus-accent text-white border-nexus-accent shadow-glow"
+                    : "nexus-glass border-nexus-border text-nexus-50"
                 }`}
               >
                 <div className="prose prose-invert prose-sm max-w-none">
@@ -162,18 +162,18 @@ export function ChatView() {
 
                 {/* Citations Footer */}
                 {msg.citations && msg.citations.length > 0 && (
-                  <div className="mt-4 pt-3 border-t border-slate-800/80 space-y-1.5">
-                    <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-                      <FileText className="h-3 w-3 text-cyan-400" />
+                  <div className="mt-4 pt-3 border-t border-nexus-border/80 space-y-1.5">
+                    <div className="text-[10px] font-semibold text-nexus-400 uppercase tracking-wider flex items-center gap-1">
+                      <FileText className="h-3 w-3 text-nexus-accent" />
                       Retrieved Grounding Sources ({msg.citations.length})
                     </div>
                     <div className="flex flex-wrap gap-2 pt-1">
                       {msg.citations.map((c, i) => (
                         <span
                           key={i}
-                          className="px-2 py-1 rounded bg-slate-900 border border-slate-800 text-[10px] text-slate-300 font-mono flex items-center gap-1"
+                          className="px-2 py-1 rounded bg-nexus-850 border border-nexus-border text-[10px] text-nexus-300 font-mono flex items-center gap-1"
                         >
-                          <span className="text-cyan-400">[{i + 1}]</span> Chunk {c.chunk_id.slice(0, 8)} (RRF: {c.rrf_score})
+                          <span className="text-nexus-accent">[{i + 1}]</span> Chunk {c.chunk_id.slice(0, 8)} (RRF: {c.rrf_score})
                         </span>
                       ))}
                     </div>
@@ -182,7 +182,7 @@ export function ChatView() {
               </div>
 
               {msg.role === "user" && (
-                <div className="h-9 w-9 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center flex-shrink-0 text-slate-300 font-bold text-xs">
+                <div className="h-9 w-9 rounded-xl bg-nexus-800 border border-nexus-border flex items-center justify-center flex-shrink-0 text-nexus-300 font-bold text-xs">
                   PA
                 </div>
               )}
@@ -192,9 +192,9 @@ export function ChatView() {
         </div>
 
         {/* Input Dock */}
-        <div className="p-4 border-t border-slate-800/80 bg-slate-950/90 backdrop-blur-md">
+        <div className="p-4 border-t border-nexus-border/80 bg-nexus-950/90 backdrop-blur-md">
           <div className="max-w-4xl mx-auto space-y-3">
-            <div className="relative glass-panel rounded-2xl p-2 border border-slate-800/80 focus-within:border-blue-500/60 shadow-2xl transition-all">
+            <div className="relative nexus-glass rounded-2xl p-2 border border-nexus-border/80 focus-within:border-nexus-accent/60 shadow-2xl transition-all">
               <textarea
                 value={inputPrompt}
                 onChange={(e) => setInputPrompt(e.target.value)}
@@ -205,23 +205,23 @@ export function ChatView() {
                   }
                 }}
                 placeholder="Ask NEXUS AI (e.g. 'Analyze GraphRAG relationships and memory indices for multi-agent architecture')..."
-                className="w-full bg-transparent text-slate-100 text-sm placeholder-slate-500 p-3 resize-none focus:outline-none min-h-[60px]"
+                className="w-full bg-transparent text-nexus-50 text-sm placeholder-nexus-500 p-3 resize-none focus:outline-none min-h-[60px]"
                 rows={2}
               />
-              <div className="flex items-center justify-between pt-2 px-2 border-t border-slate-800/50">
+              <div className="flex items-center justify-between pt-2 px-2 border-t border-nexus-border/50">
                 <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-lg bg-blue-500/10 border border-blue-500/20 text-[11px] text-blue-400 font-medium flex items-center gap-1">
+                  <span className="px-2.5 py-1 rounded-lg bg-nexus-accent/10 border border-nexus-accent/20 text-[11px] text-nexus-accent font-medium flex items-center gap-1">
                     <Sparkles className="h-3 w-3" />
                     {activeMode.replace("_", " ").toUpperCase()}
                   </span>
-                  <span className="text-[11px] text-slate-500 font-mono">
+                  <span className="text-[11px] text-nexus-500 font-mono">
                     {selectedModel}
                   </span>
                 </div>
                 <button
                   onClick={handleSendPrompt}
                   disabled={!inputPrompt.trim() || isStreaming}
-                  className="p-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-glow"
+                  className="p-2 rounded-xl bg-gradient-to-r from-nexus-accent to-nexus-brand-light hover:from-nexus-accent hover:to-nexus-brand-light text-white disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-glow"
                 >
                   <ArrowUp className="h-4 w-4" />
                 </button>

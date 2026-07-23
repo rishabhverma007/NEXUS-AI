@@ -27,14 +27,14 @@ export function PromptPlayground() {
     <div className="space-y-6">
       {/* Top Controls */}
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-          <Sliders className="h-4 w-4 text-cyan-400" /> Prompt Studio & Variable Matrix
+        <h3 className="text-sm font-semibold text-nexus-200 flex items-center gap-2">
+          <Sliders className="h-4 w-4 text-nexus-accent" /> Prompt Studio & Variable Matrix
         </h3>
 
         <button
           onClick={handleTest}
           disabled={isTesting}
-          className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs flex items-center gap-2 shadow-glow transition-all"
+          className="px-4 py-1.5 rounded-lg bg-nexus-accent hover:bg-nexus-accent text-white font-medium text-xs flex items-center gap-2 shadow-glow transition-all"
         >
           <Play className="h-4 w-4" /> {isTesting ? "Testing..." : "Test Prompt"}
         </button>
@@ -42,46 +42,46 @@ export function PromptPlayground() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Left: Prompt Template Editors */}
-        <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800 glass-panel space-y-4 text-xs">
+        <div className="p-5 rounded-xl bg-nexus-850/80 border border-nexus-border nexus-glass space-y-4 text-xs">
           <div className="space-y-1">
-            <label className="font-semibold text-slate-300">System Prompt</label>
+            <label className="font-semibold text-nexus-300">System Prompt</label>
             <textarea
               rows={3}
               value={systemPrompt}
               onChange={(e) => setSystemPrompt(e.target.value)}
-              className="w-full p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 font-mono text-xs focus:outline-none focus:border-cyan-500"
+              className="w-full p-2.5 rounded-lg bg-nexus-950 border border-nexus-border text-nexus-50 font-mono text-xs focus:outline-none focus:border-cyan-500"
             />
           </div>
 
           <div className="space-y-1">
-            <label className="font-semibold text-slate-300">User Prompt Template (with {"{variables}"})</label>
+            <label className="font-semibold text-nexus-300">User Prompt Template (with {"{variables}"})</label>
             <textarea
               rows={3}
               value={userTemplate}
               onChange={(e) => setUserTemplate(e.target.value)}
-              className="w-full p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-100 font-mono text-xs focus:outline-none focus:border-cyan-500"
+              className="w-full p-2.5 rounded-lg bg-nexus-950 border border-nexus-border text-nexus-50 font-mono text-xs focus:outline-none focus:border-cyan-500"
             />
           </div>
 
-          <div className="space-y-2 pt-2 border-t border-slate-800">
-            <span className="font-semibold text-slate-300 block">Variable Inputs</span>
+          <div className="space-y-2 pt-2 border-t border-nexus-border">
+            <span className="font-semibold text-nexus-300 block">Variable Inputs</span>
             <div className="space-y-2">
               <div>
-                <span className="text-[10px] text-cyan-400 font-mono block">{"{userPrompt}"}</span>
+                <span className="text-[10px] text-nexus-accent font-mono block">{"{userPrompt}"}</span>
                 <input
                   type="text"
                   value={userPromptVal}
                   onChange={(e) => setUserPromptVal(e.target.value)}
-                  className="w-full p-2 rounded bg-slate-950 border border-slate-800 text-slate-100 text-xs"
+                  className="w-full p-2 rounded bg-nexus-950 border border-nexus-border text-nexus-50 text-xs"
                 />
               </div>
               <div>
-                <span className="text-[10px] text-cyan-400 font-mono block">{"{vectorContext}"}</span>
+                <span className="text-[10px] text-nexus-accent font-mono block">{"{vectorContext}"}</span>
                 <input
                   type="text"
                   value={vectorContextVal}
                   onChange={(e) => setVectorContextVal(e.target.value)}
-                  className="w-full p-2 rounded bg-slate-950 border border-slate-800 text-slate-100 text-xs"
+                  className="w-full p-2 rounded bg-nexus-950 border border-nexus-border text-nexus-50 text-xs"
                 />
               </div>
             </div>
@@ -89,31 +89,31 @@ export function PromptPlayground() {
         </div>
 
         {/* Right: Rendered Prompt & Test Result */}
-        <div className="p-5 rounded-xl bg-slate-900/80 border border-slate-800 glass-panel space-y-4 text-xs flex flex-col justify-between">
+        <div className="p-5 rounded-xl bg-nexus-850/80 border border-nexus-border nexus-glass space-y-4 text-xs flex flex-col justify-between">
           <div>
-            <span className="font-semibold text-slate-300 block mb-2">Rendered Output Preview</span>
+            <span className="font-semibold text-nexus-300 block mb-2">Rendered Output Preview</span>
             {testResult ? (
               <div className="space-y-3">
-                <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 font-mono text-slate-200 text-xs whitespace-pre-wrap">
+                <div className="p-3 rounded-lg bg-nexus-950 border border-nexus-border font-mono text-nexus-200 text-xs whitespace-pre-wrap">
                   {testResult.renderedPrompt}
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-950/80 border border-emerald-500/30 text-emerald-300 font-mono text-xs">
-                  <span className="text-[10px] text-slate-400 block mb-1">Simulated Output Response</span>
+                <div className="p-3 rounded-lg bg-nexus-950/80 border border-nexus-emerald/30 text-emerald-300 font-mono text-xs">
+                  <span className="text-[10px] text-nexus-400 block mb-1">Simulated Output Response</span>
                   {testResult.responseOutput}
                 </div>
               </div>
             ) : (
-              <div className="p-8 text-center border border-dashed border-slate-800 rounded-lg text-slate-400">
+              <div className="p-8 text-center border border-dashed border-nexus-border rounded-lg text-nexus-400">
                 Click "Test Prompt" to inject variables and evaluate.
               </div>
             )}
           </div>
 
           {testResult && (
-            <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-[11px] font-mono text-slate-400">
-              <span>Tokens Estimated: <strong className="text-cyan-400">{testResult.tokensEstimated}</strong></span>
-              <span>Eval Score: <strong className="text-emerald-400">{(testResult.evalScore * 100).toFixed(1)}%</strong></span>
+            <div className="flex items-center justify-between pt-2 border-t border-nexus-border text-[11px] font-mono text-nexus-400">
+              <span>Tokens Estimated: <strong className="text-nexus-accent">{testResult.tokensEstimated}</strong></span>
+              <span>Eval Score: <strong className="text-nexus-emerald">{(testResult.evalScore * 100).toFixed(1)}%</strong></span>
             </div>
           )}
         </div>

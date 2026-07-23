@@ -8,9 +8,9 @@ export function ApprovalQueueView() {
 
   if (isLoading) {
     return (
-      <div className="p-6 text-center border border-slate-800 rounded-xl bg-slate-900/60 animate-pulse">
-        <Clock className="h-6 w-6 text-slate-400 mx-auto mb-2" />
-        <span className="text-xs text-slate-400">Loading approval queue...</span>
+      <div className="p-6 text-center border border-nexus-border rounded-xl bg-nexus-850/60 animate-pulse">
+        <Clock className="h-6 w-6 text-nexus-400 mx-auto mb-2" />
+        <span className="text-xs text-nexus-400">Loading approval queue...</span>
       </div>
     );
   }
@@ -18,21 +18,21 @@ export function ApprovalQueueView() {
   const getStatusBadge = (st: string) => {
     switch (st) {
       case "approved":
-        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> APPROVED</span>;
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-nexus-emerald border border-nexus-emerald/30 flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> APPROVED</span>;
       case "rejected":
-        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1"><XCircle className="h-3 w-3" /> REJECTED</span>;
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-500/20 text-nexus-rose border border-nexus-rose/30 flex items-center gap-1"><XCircle className="h-3 w-3" /> REJECTED</span>;
       default:
-        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1 animate-pulse"><Clock className="h-3 w-3" /> PENDING REVIEW</span>;
+        return <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-nexus-amber border border-nexus-amber/30 flex items-center gap-1 animate-pulse"><Clock className="h-3 w-3" /> PENDING REVIEW</span>;
     }
   };
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-          <Lock className="h-4 w-4 text-cyan-400" /> Multi-Step Governance Approval Queue ({approvals.length})
+        <h3 className="text-sm font-semibold text-nexus-200 flex items-center gap-2">
+          <Lock className="h-4 w-4 text-nexus-accent" /> Multi-Step Governance Approval Queue ({approvals.length})
         </h3>
-        <span className="text-xs text-slate-400">Live Approval Workflows for Tools, Prompts & Research</span>
+        <span className="text-xs text-nexus-400">Live Approval Workflows for Tools, Prompts & Research</span>
       </div>
 
       <div className="space-y-3">
@@ -42,18 +42,18 @@ export function ApprovalQueueView() {
           return (
             <div
               key={appr.id}
-              className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 glass-panel flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-slate-700 transition-all text-xs"
+              className="p-4 rounded-xl bg-nexus-850/80 border border-nexus-border nexus-glass flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-nexus-border transition-all text-xs"
             >
               <div className="space-y-1.5 flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded bg-blue-600/20 text-blue-400 text-[10px] font-bold uppercase border border-blue-500/30">
+                  <span className="px-2 py-0.5 rounded bg-nexus-accent/20 text-nexus-accent text-[10px] font-bold uppercase border border-nexus-accent/30">
                     {appr.requestType}
                   </span>
                   {getStatusBadge(appr.status)}
                 </div>
 
-                <h4 className="text-xs font-bold text-slate-100">{appr.title}</h4>
-                <p className="text-slate-300">Requester: <strong className="text-slate-200">{appr.requesterId}</strong> | Reason: {appr.reason || "N/A"}</p>
+                <h4 className="text-xs font-bold text-nexus-50">{appr.title}</h4>
+                <p className="text-nexus-300">Requester: <strong className="text-nexus-200">{appr.requesterId}</strong> | Reason: {appr.reason || "N/A"}</p>
               </div>
 
               {isPending && (

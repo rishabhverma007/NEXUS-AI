@@ -17,17 +17,17 @@ export function CollectionTree({
   onCreateCollectionClick,
 }: CollectionTreeProps) {
   return (
-    <div className="w-64 h-full border-r border-slate-800/80 bg-slate-950/60 p-4 space-y-4 font-mono text-xs">
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800/60">
+    <div className="w-64 h-full border-r border-nexus-border/80 bg-nexus-950/60 p-4 space-y-4 font-mono text-xs">
+      <div className="flex items-center justify-between pb-3 border-b border-nexus-border/60">
         <div className="flex items-center gap-2">
-          <Layers className="h-4 w-4 text-cyan-400" />
-          <span className="font-semibold text-slate-100 uppercase tracking-wider text-[11px]">
+          <Layers className="h-4 w-4 text-nexus-accent" />
+          <span className="font-semibold text-nexus-50 uppercase tracking-wider text-[11px]">
             Collections
           </span>
         </div>
         <button
           onClick={onCreateCollectionClick}
-          className="p-1 rounded-md bg-slate-900 border border-slate-800 text-slate-300 hover:text-white"
+          className="p-1 rounded-md bg-nexus-850 border border-nexus-border text-nexus-300 hover:text-white"
           title="Create New Collection"
         >
           <Plus className="h-3.5 w-3.5" />
@@ -39,12 +39,12 @@ export function CollectionTree({
           onClick={() => onSelectCollection(null)}
           className={`w-full p-2 rounded-xl text-left flex items-center justify-between transition-all ${
             selectedCollectionId === null
-              ? "bg-blue-600/20 text-cyan-400 border border-blue-500/40 font-bold"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+              ? "bg-nexus-accent/20 text-nexus-accent border border-nexus-accent/40 font-bold"
+              : "text-nexus-400 hover:text-nexus-200 hover:bg-nexus-850/60"
           }`}
         >
           <div className="flex items-center gap-2">
-            <FolderOpen className="h-3.5 w-3.5 text-cyan-400" />
+            <FolderOpen className="h-3.5 w-3.5 text-nexus-accent" />
             <span>All Documents</span>
           </div>
         </button>
@@ -57,15 +57,15 @@ export function CollectionTree({
               onClick={() => onSelectCollection(col.id)}
               className={`w-full p-2.5 rounded-xl text-left flex items-center justify-between transition-all ${
                 isSelected
-                  ? "bg-blue-600/20 text-cyan-400 border border-blue-500/40 font-bold shadow-glow"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
+                  ? "bg-nexus-accent/20 text-nexus-accent border border-nexus-accent/40 font-bold shadow-glow"
+                  : "text-nexus-400 hover:text-nexus-200 hover:bg-nexus-850/60"
               }`}
             >
               <div className="flex items-center gap-2 truncate">
-                <Folder className="h-3.5 w-3.5 text-indigo-400 flex-shrink-0" />
+                <Folder className="h-3.5 w-3.5 text-nexus-brand-light flex-shrink-0" />
                 <span className="truncate">{col.name}</span>
               </div>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">
+              <span className="text-[10px] px-1.5 py-0.5 rounded bg-nexus-850 text-nexus-400 border border-nexus-border">
                 {col.documentCount}
               </span>
             </button>

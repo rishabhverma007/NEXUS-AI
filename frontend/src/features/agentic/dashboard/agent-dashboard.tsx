@@ -18,11 +18,11 @@ export function AgentDashboard() {
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <Bot className="h-6 w-6 text-cyan-400" />
+          <h1 className="text-2xl font-bold text-nexus-50 tracking-tight flex items-center gap-2">
+            <Bot className="h-6 w-6 text-nexus-accent" />
             Agentic RAG Orchestration Inspector
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-nexus-400 mt-1">
             Task planning, DAG workflow graph, iterative retrieval passes, reflection evaluation, and hallucination verification.
           </p>
         </div>

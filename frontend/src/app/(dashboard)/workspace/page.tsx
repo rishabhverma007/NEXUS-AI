@@ -26,11 +26,11 @@ export default function WorkspacePage() {
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <Database className="h-6 w-6 text-cyan-400" />
+          <h1 className="text-2xl font-bold text-nexus-50 tracking-tight flex items-center gap-2">
+            <Database className="h-6 w-6 text-nexus-accent" />
             Workspace Settings & Members
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-sm text-nexus-400 mt-1">
             Manage multi-tenant workspace members, roles, and resource access limits.
           </p>
         </div>
@@ -44,35 +44,35 @@ export default function WorkspacePage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
-          <span className="text-[10px] text-slate-400 uppercase font-mono">Workspace ID</span>
-          <div className="text-sm font-bold text-slate-100 font-mono">{currentWorkspace.id}</div>
-          <p className="text-xs text-slate-400">{currentWorkspace.description}</p>
+        <div className="nexus-glass rounded-2xl border border-nexus-border p-6 space-y-3 hover:border-nexus-border-hover transition-all duration-200">
+          <span className="text-xs text-nexus-500 uppercase font-mono">Workspace ID</span>
+          <div className="text-sm font-bold text-nexus-50 font-mono">{currentWorkspace.id}</div>
+          <p className="text-sm text-nexus-400">{currentWorkspace.description}</p>
         </div>
 
-        <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-3">
-          <span className="text-[10px] text-slate-400 uppercase font-mono">Active Members</span>
-          <div className="text-sm font-bold text-slate-100 font-mono">{members.length} Workspace Users</div>
-          <p className="text-xs text-slate-400">Scoped with RLS security policies.</p>
+        <div className="nexus-glass rounded-2xl border border-nexus-border p-6 space-y-3 hover:border-nexus-border-hover transition-all duration-200">
+          <span className="text-xs text-nexus-500 uppercase font-mono">Active Members</span>
+          <div className="text-sm font-bold text-nexus-50 font-mono">{members.length} Workspace Users</div>
+          <p className="text-sm text-nexus-400">Scoped with RLS security policies.</p>
         </div>
       </div>
 
       {/* Member Table */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4">
-        <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-          <Users className="h-4 w-4 text-indigo-400" />
+      <div className="nexus-glass rounded-2xl border border-nexus-border p-6 space-y-4 hover:border-nexus-border-hover transition-all duration-200">
+        <h3 className="text-sm font-semibold text-nexus-200 flex items-center gap-2">
+          <Users className="h-4 w-4 text-nexus-brand-light" />
           Workspace Members & Roles
         </h3>
 
         <div className="space-y-3">
           {members.map((m) => (
-            <div key={m.id} className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs">
+            <div key={m.id} className="p-4 rounded-xl bg-nexus-850/60 border border-nexus-border flex items-center justify-between text-sm hover:border-nexus-border-hover transition-all">
               <div className="space-y-0.5">
-                <div className="font-semibold text-slate-100">{m.name}</div>
-                <div className="text-[11px] text-slate-400 font-mono">{m.email}</div>
+                <div className="font-semibold text-nexus-50">{m.name}</div>
+                <div className="text-xs text-nexus-400 font-mono">{m.email}</div>
               </div>
 
-              <Badge variant={m.role === "owner" ? "cyan" : "secondary"} className="uppercase">
+              <Badge variant={m.role === "owner" ? "brand" : "secondary"} className="uppercase">
                 {m.role}
               </Badge>
             </div>
@@ -82,15 +82,16 @@ export default function WorkspacePage() {
 
       {/* Invite Modal */}
       {showInviteModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md glass-panel p-6 rounded-2xl border border-slate-800 space-y-4 shadow-2xl">
-            <h3 className="text-sm font-bold text-slate-100">Invite Member to Workspace</h3>
+        <div className="fixed inset-0 bg-nexus-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+          <div className="w-full max-w-md nexus-glass-elevated rounded-2xl border border-nexus-border p-6 space-y-4">
+            <h3 className="text-sm font-bold text-nexus-50">Invite Member to Workspace</h3>
             <form onSubmit={handleInvite} className="space-y-3">
               <Input
                 type="email"
                 placeholder="colleague@nexus.ai"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
+                variant="premium"
                 required
               />
               <div className="flex gap-3 pt-2">

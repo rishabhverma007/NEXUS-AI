@@ -10,7 +10,7 @@ export function ResearchHealthMetrics() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} className="h-24 bg-slate-900/60 border border-slate-800 rounded-xl animate-pulse" />
+          <div key={i} className="h-24 bg-nexus-850/60 border border-nexus-border rounded-xl animate-pulse" />
         ))}
       </div>
     );
@@ -22,16 +22,16 @@ export function ResearchHealthMetrics() {
       value: metrics.totalResearchesExecuted,
       subtext: "Across 4 execution modes",
       icon: Sparkles,
-      color: "from-blue-500 to-indigo-500",
-      textColor: "text-blue-400",
+      color: "from-nexus-accent to-nexus-brand-light",
+      textColor: "text-nexus-accent",
     },
     {
       title: "Evidence Nodes Gathered",
       value: metrics.totalEvidenceNodesCollected,
       subtext: "Hybrid RAG + GraphRAG",
       icon: FileText,
-      color: "from-cyan-500 to-blue-500",
-      textColor: "text-cyan-400",
+      color: "from-nexus-accent to-nexus-accent",
+      textColor: "text-nexus-accent",
     },
     {
       title: "Hypotheses Validated",
@@ -39,7 +39,7 @@ export function ResearchHealthMetrics() {
       subtext: "Supported by evidence",
       icon: CheckCircle2,
       color: "from-emerald-500 to-teal-500",
-      textColor: "text-emerald-400",
+      textColor: "text-nexus-emerald",
     },
     {
       title: "Avg Research Speed",
@@ -47,7 +47,7 @@ export function ResearchHealthMetrics() {
       subtext: "Per multi-phase run",
       icon: Clock,
       color: "from-amber-500 to-orange-500",
-      textColor: "text-amber-400",
+      textColor: "text-nexus-amber",
     },
     {
       title: "Average Confidence Rating",
@@ -66,17 +66,17 @@ export function ResearchHealthMetrics() {
         return (
           <div
             key={i}
-            className="p-4 rounded-xl bg-slate-900/70 border border-slate-800/80 glass-panel flex flex-col justify-between hover:border-slate-700 transition-all duration-200"
+            className="p-4 rounded-xl bg-nexus-850/70 border border-nexus-border/80 nexus-glass flex flex-col justify-between hover:border-nexus-border transition-all duration-200"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-400 font-medium">{c.title}</span>
+              <span className="text-xs text-nexus-400 font-medium">{c.title}</span>
               <div className={`p-1.5 rounded-lg bg-gradient-to-tr ${c.color} bg-opacity-15`}>
                 <Icon className="h-4 w-4 text-white" />
               </div>
             </div>
             <div className="mt-3">
               <div className={`text-2xl font-bold ${c.textColor} tracking-tight`}>{c.value}</div>
-              <div className="text-[11px] text-slate-400 mt-0.5">{c.subtext}</div>
+              <div className="text-[11px] text-nexus-400 mt-0.5">{c.subtext}</div>
             </div>
           </div>
         );

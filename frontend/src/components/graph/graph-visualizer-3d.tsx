@@ -113,15 +113,15 @@ export function GraphVisualizer3D({ onNodeSelect }: GraphVisualizer3DProps) {
 
   if (isLoading || !data) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-slate-950 text-slate-400 font-mono text-xs gap-3">
-        <RefreshCw className="h-5 w-5 animate-spin text-cyan-400" />
+      <div className="w-full h-full flex items-center justify-center bg-nexus-950 text-nexus-400 font-mono text-xs gap-3">
+        <RefreshCw className="h-5 w-5 animate-spin text-nexus-accent" />
         <span>Synthesizing Sub-Graph Traversal Topology...</span>
       </div>
     );
   }
 
   return (
-    <div className="w-full h-full flex relative bg-slate-950/80 rounded-2xl overflow-hidden">
+    <div className="w-full h-full flex relative bg-nexus-950/80 rounded-2xl overflow-hidden">
       {/* 3D Canvas Viewport */}
       <div className="flex-1 h-full relative cursor-grab active:cursor-grabbing">
         <Canvas camera={{ position: [0, 0, 12], fov: 60 }}>
@@ -133,9 +133,9 @@ export function GraphVisualizer3D({ onNodeSelect }: GraphVisualizer3DProps) {
       </div>
 
       {/* Selected Node Details Sidebar */}
-      <div className="w-80 h-full border-l border-slate-800/80 bg-slate-950/90 glass-panel p-5 overflow-y-auto z-10">
-        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
-          <Layers className="h-4 w-4 text-indigo-400" />
+      <div className="w-80 h-full border-l border-nexus-border/80 bg-nexus-950/90 nexus-glass p-5 overflow-y-auto z-10">
+        <h3 className="text-xs font-semibold text-nexus-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <Layers className="h-4 w-4 text-nexus-brand-light" />
           Entity Inspector
         </h3>
 
@@ -145,29 +145,29 @@ export function GraphVisualizer3D({ onNodeSelect }: GraphVisualizer3DProps) {
             animate={{ opacity: 1, x: 0 }}
             className="space-y-4"
           >
-            <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 uppercase border border-blue-500/30">
+            <div className="p-4 rounded-xl bg-nexus-850/60 border border-nexus-border space-y-2">
+              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-nexus-accent/20 text-nexus-accent uppercase border border-nexus-accent/30">
                 {selectedNode.entity_type}
               </span>
-              <h2 className="text-base font-semibold text-slate-100">{selectedNode.name}</h2>
-              <p className="text-xs text-slate-400 leading-relaxed">{selectedNode.description}</p>
+              <h2 className="text-base font-semibold text-nexus-50">{selectedNode.name}</h2>
+              <p className="text-xs text-nexus-400 leading-relaxed">{selectedNode.description}</p>
             </div>
 
             <div className="space-y-2">
-              <h4 className="text-[11px] font-semibold text-slate-400 uppercase">Connected Relationships</h4>
+              <h4 className="text-[11px] font-semibold text-nexus-400 uppercase">Connected Relationships</h4>
               {data.edges
                 .filter((e) => e.source === selectedNode.id || e.target === selectedNode.id)
                 .map((edge) => (
-                  <div key={edge.id} className="p-3 rounded-lg bg-slate-900/40 border border-slate-800/60 text-xs space-y-1">
-                    <span className="text-cyan-400 font-mono font-bold text-[11px]">{edge.relation_type}</span>
-                    <p className="text-[11px] text-slate-300">{edge.description}</p>
+                  <div key={edge.id} className="p-3 rounded-lg bg-nexus-850/40 border border-nexus-border/60 text-xs space-y-1">
+                    <span className="text-nexus-accent font-mono font-bold text-[11px]">{edge.relation_type}</span>
+                    <p className="text-[11px] text-nexus-300">{edge.description}</p>
                   </div>
                 ))}
             </div>
           </motion.div>
         ) : (
-          <div className="text-center py-12 text-xs text-slate-500 space-y-2">
-            <Network className="h-8 w-8 mx-auto text-slate-600 animate-pulse" />
+          <div className="text-center py-12 text-xs text-nexus-500 space-y-2">
+            <Network className="h-8 w-8 mx-auto text-nexus-600 animate-pulse" />
             <p>Click any node in the 3D viewport to inspect entity attributes & graph connections.</p>
           </div>
         )}

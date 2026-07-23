@@ -26,7 +26,7 @@ export function AgentBuilder() {
       description: "Classifies user queries, decomposes multi-step instructions, and selects execution pipeline.",
       icon: Bot,
       status: "Active",
-      color: "from-blue-500 to-indigo-500"
+      color: "from-nexus-accent to-nexus-brand-light"
     },
     {
       name: "VectorRAGAgent",
@@ -34,7 +34,7 @@ export function AgentBuilder() {
       description: "Queries pgvector dense cosine embeddings + BM25 sparse index using Reciprocal Rank Fusion (RRF).",
       icon: Database,
       status: "Active",
-      color: "from-cyan-500 to-blue-500"
+      color: "from-nexus-accent to-nexus-accent"
     },
     {
       name: "GraphRAGAgent",
@@ -42,7 +42,7 @@ export function AgentBuilder() {
       description: "Traverses NetworkX entity/relationship graphs to build multi-hop context sub-graphs.",
       icon: GitFork,
       status: "Active",
-      color: "from-indigo-500 to-purple-500"
+      color: "from-nexus-brand-light to-purple-500"
     },
     {
       name: "MemoryAgent",
@@ -58,7 +58,7 @@ export function AgentBuilder() {
       description: "Verifies hallucination score, cross-checks context citations, and enforces quality threshold.",
       icon: ShieldCheck,
       status: "Active",
-      color: "from-amber-500 to-emerald-500"
+      color: "from-nexus-amber to-nexus-emerald"
     },
     {
       name: "SynthesisAgent",
@@ -75,11 +75,11 @@ export function AgentBuilder() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <Cpu className="h-6 w-6 text-indigo-400" />
+          <h1 className="text-2xl font-bold text-nexus-50 tracking-tight flex items-center gap-2">
+            <Cpu className="h-6 w-6 text-nexus-brand-light" />
             Multi-Agent Orchestration & Reflection Engine
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-nexus-400 mt-1">
             Configure agentic collaboration pipelines, factual reflection thresholds, and GraphRAG parameters.
           </p>
         </div>
@@ -95,45 +95,45 @@ export function AgentBuilder() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
-              className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-4 relative overflow-hidden"
+              className="nexus-glass p-6 rounded-2xl border border-nexus-border space-y-4 relative overflow-hidden"
             >
               <div className={`h-1 w-full bg-gradient-to-r ${agent.color} absolute top-0 left-0`} />
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-cyan-400">
+                  <div className="p-2 rounded-xl bg-nexus-850 border border-nexus-border text-nexus-accent">
                     <Icon className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-100">{agent.name}</h3>
-                    <span className="text-[10px] text-slate-400 font-mono">{agent.type}</span>
+                    <h3 className="text-sm font-semibold text-nexus-50">{agent.name}</h3>
+                    <span className="text-[10px] text-nexus-400 font-mono">{agent.type}</span>
                   </div>
                 </div>
 
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-bold text-emerald-400 flex items-center gap-1">
+                <span className="px-2 py-0.5 rounded-full bg-nexus-emerald/10 border border-nexus-emerald/30 text-[10px] font-bold text-nexus-emerald flex items-center gap-1">
                   <Check className="h-3 w-3" />
                   {agent.status}
                 </span>
               </div>
 
-              <p className="text-xs text-slate-400 leading-relaxed">{agent.description}</p>
+              <p className="text-xs text-nexus-400 leading-relaxed">{agent.description}</p>
             </motion.div>
           );
         })}
       </div>
 
       {/* Engine Threshold Controls */}
-      <div className="glass-panel p-6 rounded-2xl border border-slate-800 space-y-6">
-        <h2 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-          <Sliders className="h-4 w-4 text-cyan-400" />
+      <div className="nexus-glass p-6 rounded-2xl border border-nexus-border space-y-6">
+        <h2 className="text-sm font-semibold text-nexus-200 flex items-center gap-2">
+          <Sliders className="h-4 w-4 text-nexus-accent" />
           Pipeline Parameter Controls
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
-              <span className="text-slate-300">Reflection Evaluation Threshold</span>
-              <span className="font-mono text-cyan-400 font-bold">{Math.round(reflectionThreshold * 100)}%</span>
+              <span className="text-nexus-300">Reflection Evaluation Threshold</span>
+              <span className="font-mono text-nexus-accent font-bold">{Math.round(reflectionThreshold * 100)}%</span>
             </div>
             <input
               type="range"
@@ -142,15 +142,15 @@ export function AgentBuilder() {
               step="0.01"
               value={reflectionThreshold}
               onChange={(e) => setReflectionThreshold(parseFloat(e.target.value))}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+              className="w-full h-1.5 bg-nexus-800 rounded-lg appearance-none cursor-pointer accent-nexus-accent"
             />
-            <p className="text-[10px] text-slate-500">Minimum factual score required to pass reflection verification.</p>
+            <p className="text-[10px] text-nexus-500">Minimum factual score required to pass reflection verification.</p>
           </div>
 
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
-              <span className="text-slate-300">Hybrid Search Top-K Chunks</span>
-              <span className="font-mono text-cyan-400 font-bold">{hybridSearchTopK}</span>
+              <span className="text-nexus-300">Hybrid Search Top-K Chunks</span>
+              <span className="font-mono text-nexus-accent font-bold">{hybridSearchTopK}</span>
             </div>
             <input
               type="range"
@@ -159,15 +159,15 @@ export function AgentBuilder() {
               step="1"
               value={hybridSearchTopK}
               onChange={(e) => setHybridSearchTopK(parseInt(e.target.value))}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+              className="w-full h-1.5 bg-nexus-800 rounded-lg appearance-none cursor-pointer accent-nexus-accent"
             />
-            <p className="text-[10px] text-slate-500">Number of document chunks retrieved via RRF fusion.</p>
+            <p className="text-[10px] text-nexus-500">Number of document chunks retrieved via RRF fusion.</p>
           </div>
 
           <div className="space-y-2">
             <div className="flex justify-between text-xs">
-              <span className="text-slate-300">GraphRAG Traversal Depth</span>
-              <span className="font-mono text-cyan-400 font-bold">{graphDepth} Hops</span>
+              <span className="text-nexus-300">GraphRAG Traversal Depth</span>
+              <span className="font-mono text-nexus-accent font-bold">{graphDepth} Hops</span>
             </div>
             <input
               type="range"
@@ -176,9 +176,9 @@ export function AgentBuilder() {
               step="1"
               value={graphDepth}
               onChange={(e) => setGraphDepth(parseInt(e.target.value))}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+              className="w-full h-1.5 bg-nexus-800 rounded-lg appearance-none cursor-pointer accent-nexus-accent"
             />
-            <p className="text-[10px] text-slate-500">Maximum node hops during entity sub-graph query.</p>
+            <p className="text-[10px] text-nexus-500">Maximum node hops during entity sub-graph query.</p>
           </div>
         </div>
       </div>

@@ -17,11 +17,11 @@ export function MemoryDashboard() {
     <div className="p-8 space-y-8 max-w-7xl mx-auto">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2">
-            <Brain className="h-6 w-6 text-cyan-400" />
+          <h1 className="text-2xl font-bold text-nexus-50 tracking-tight flex items-center gap-2">
+            <Brain className="h-6 w-6 text-nexus-accent" />
             Enterprise Long-Term Memory Platform
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-sm text-nexus-400 mt-1">
             Hierarchical memory stores (Working, Episodic, Semantic, Workspace) integrated directly into AI Runtime SDK.
           </p>
         </div>
