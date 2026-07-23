@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, Check, CheckCircle2, Info, ShieldAlert, Sparkles, X } from "lucide-react";
+import { Bell, Check, X, Sparkles } from "lucide-react";
 import { useNotifications } from "@/providers/notification-provider";
 
 export function NotificationDrawer() {
@@ -13,72 +13,101 @@ export function NotificationDrawer() {
     clearAll,
   } = useNotifications();
 
-  if (!isNotificationDrawerOpen) return null;
-
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex justify-end">
-        <motion.div
-          initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "100%" }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="w-80 sm:w-96 h-full border-l border-slate-800 bg-slate-950/95 glass-panel p-5 flex flex-col justify-between shadow-2xl"
-        >
-          <div className="space-y-4 overflow-y-auto flex-1">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div className="flex items-center gap-2">
-                <Bell className="h-4 w-4 text-cyan-400" />
-                <h3 className="text-xs font-semibold text-slate-100 uppercase tracking-wider">
-                  Notification Center
-                </h3>
+      {isNotificationDrawerOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="absolute inset-0 bg-nexus-950/60 backdrop-blur-sm"
+            onClick={() => setNotificationDrawerOpen(false)}
+          />
+
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="relative w-80 sm:w-96 h-full border-l border-nexus-border bg-nexus-950/95 nexus-glass p-5 flex flex-col shadow-2xl"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between pb-4 border-b border-nexus-border">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-nexus-accent/10 border border-nexus-accent/20">
+                  <Bell className="h-4 w-4 text-nexus-accent" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-semibold text-nexus-50">
+                    Notifications
+                  </h3>
+                  <p className="text-[10px] text-nexus-400">
+                    {notifications.filter((n) => !n.read).length} unread
+                  </p>
+                </div>
               </div>
               <button
                 onClick={() => setNotificationDrawerOpen(false)}
-                className="text-slate-400 hover:text-slate-200 p-1 rounded-lg hover:bg-slate-900"
+                className="h-8 w-8 rounded-xl bg-nexus-800/60 border border-nexus-border flex items-center justify-center text-nexus-400 hover:text-nexus-200 transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="flex items-center justify-between text-[11px] text-slate-400">
-              <button onClick={markAllAsRead} className="hover:text-slate-200 flex items-center gap-1">
-                <Check className="h-3 w-3 text-emerald-400" /> Mark all read
+            {/* Actions */}
+            <div className="flex items-center justify-between py-3 text-[11px]">
+              <button
+                onClick={markAllAsRead}
+                className="flex items-center gap-1.5 text-nexus-400 hover:text-nexus-200 transition-colors"
+              >
+                <Check className="h-3.5 w-3.5 text-nexus-emerald" />
+                <span>Mark all read</span>
               </button>
-              <button onClick={clearAll} className="hover:text-rose-400">
+              <button
+                onClick={clearAll}
+                className="text-nexus-400 hover:text-nexus-rose transition-colors"
+              >
                 Clear all
               </button>
             </div>
 
-            <div className="space-y-3 pt-2">
+            {/* Notifications List */}
+            <div className="flex-1 overflow-y-auto space-y-2 pr-1">
               {notifications.length === 0 ? (
-                <div className="text-center py-12 text-xs text-slate-500">
-                  No notifications yet.
+                <div className="flex flex-col items-center justify-center py-16 text-center">
+                  <Bell className="h-8 w-8 text-nexus-600 mb-3" />
+                  <p className="text-sm text-nexus-500">No notifications yet</p>
+                  <p className="text-xs text-nexus-600 mt-1">You&apos;re all caught up</p>
                 </div>
               ) : (
-                notifications.map((item) => (
-                  <div
+                notifications.map((item, idx) => (
+                  <motion.div
                     key={item.id}
-                    className={`p-3.5 rounded-xl border text-xs space-y-1 ${
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.02 }}
+                    className={`p-4 rounded-2xl border text-sm space-y-1.5 transition-all hover:shadow-nexus-sm ${
                       item.type === "success"
-                        ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-300"
+                        ? "bg-nexus-emerald/10 border-nexus-emerald/25"
                         : item.type === "agent"
-                        ? "bg-blue-500/10 border-blue-500/30 text-blue-300"
-                        : "bg-slate-900/60 border-slate-800 text-slate-300"
+                        ? "bg-nexus-brand/10 border-nexus-brand/20"
+                        : "bg-nexus-800/40 border-nexus-border"
                     }`}
                   >
-                    <div className="flex items-center justify-between font-semibold text-slate-100">
-                      <span>{item.title}</span>
-                      <span className="text-[10px] text-slate-400 font-mono">{item.timestamp}</span>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-nexus-50">{item.title}</span>
+                      <span className="text-[10px] text-nexus-500 font-mono">{item.timestamp}</span>
                     </div>
-                    <p className="text-[11px] leading-relaxed text-slate-400">{item.message}</p>
-                  </div>
+                    <p className="text-xs text-nexus-400 leading-relaxed">{item.message}</p>
+                  </motion.div>
                 ))
               )}
             </div>
-          </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      )}
     </AnimatePresence>
   );
 }

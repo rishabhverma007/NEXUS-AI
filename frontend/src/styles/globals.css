@@ -2,88 +2,710 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   NEXUS AI v2.0 — Design System
+   Apple × Linear × Vercel × Arc × Framer × Stripe × Figma
+   ============================================================ */
+
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    /* Brand Colors */
+    --nexus-bg: #05070A;
+    --nexus-bg-secondary: #0A0D14;
+    --nexus-surface: #0D1117;
+    --nexus-surface-elevated: #131822;
+    --nexus-glass: rgba(255, 255, 255, 0.04);
+    --nexus-glass-hover: rgba(255, 255, 255, 0.08);
+    --nexus-glass-active: rgba(255, 255, 255, 0.12);
+    --nexus-border: rgba(255, 255, 255, 0.08);
+    --nexus-border-hover: rgba(255, 255, 255, 0.14);
+    --nexus-border-active: rgba(255, 255, 255, 0.2);
+    --nexus-brand: #7C3AED;
+    --nexus-brand-light: #8B5CF6;
+    --nexus-brand-dark: #6D28D9;
+    --nexus-accent: #38BDF8;
+    --nexus-accent-dim: #0284C7;
+    --nexus-emerald: #10B981;
+    --nexus-emerald-dim: #059669;
+    --nexus-amber: #F59E0B;
+    --nexus-rose: #F43F5E;
 
-    --card: 222.2 84% 6.9%;
-    --card-foreground: 210 40% 98%;
+    /* Text */
+    --nexus-text-primary: #F8FAFC;
+    --nexus-text-secondary: #94A3B8;
+    --nexus-text-tertiary: #64748B;
+    --nexus-text-disabled: #475569;
 
-    --popover: 222.2 84% 6.9%;
-    --popover-foreground: 210 40% 98%;
+    /* Surfaces */
+    --nexus-surface-glass: rgba(13, 17, 23, 0.65);
+    --nexus-surface-glass-elevated: rgba(19, 24, 34, 0.75);
+    --nexus-surface-glass-hover: rgba(13, 17, 23, 0.8);
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Shadows */
+    --nexus-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --nexus-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+    --nexus-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.3);
+    --nexus-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+    --nexus-shadow-glow-brand: 0 0 24px -4px rgba(124, 58, 237, 0.4);
+    --nexus-shadow-glow-accent: 0 0 24px -4px rgba(56, 189, 248, 0.4);
+    --nexus-shadow-glow-emerald: 0 0 24px -4px rgba(16, 185, 129, 0.4);
+    --nexus-shadow-glow-amber: 0 0 24px -4px rgba(245, 158, 11, 0.4);
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    /* Blur */
+    --nexus-blur-sm: 8px;
+    --nexus-blur-md: 16px;
+    --nexus-blur-lg: 24px;
+    --nexus-blur-xl: 40px;
+    --nexus-blur-2xl: 64px;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    /* Radius */
+    --nexus-radius-xs: 4px;
+    --nexus-radius-sm: 6px;
+    --nexus-radius-md: 8px;
+    --nexus-radius-lg: 12px;
+    --nexus-radius-xl: 16px;
+    --nexus-radius-2xl: 20px;
+    --nexus-radius-3xl: 24px;
+    --nexus-radius-full: 9999px;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    /* Typography */
+    --nexus-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --nexus-font-mono: 'IBM Plex Mono', 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  }
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+  * {
+    border-color: var(--nexus-border);
+  }
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
-
-    --radius: 0.75rem;
+  body {
+    background-color: var(--nexus-bg);
+    background-image: 
+      radial-gradient(ellipse 80% 80% at 50% -20%, rgba(124, 58, 237, 0.08), transparent),
+      radial-gradient(ellipse 60% 60% at 80% 20%, rgba(56, 189, 248, 0.05), transparent),
+      radial-gradient(ellipse 60% 60% at 20% 80%, rgba(16, 185, 129, 0.04), transparent);
+    color: var(--nexus-text-primary);
+    font-family: var(--nexus-font-sans);
+    overflow-x: hidden;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 
-body {
-  background-color: #05070d;
-  color: #f1f5f9;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  overflow-x: hidden;
+/* ============================================================
+   GLASSMORPHISM SYSTEM
+   ============================================================ */
+
+@layer components {
+  .nexus-glass {
+    background: var(--nexus-surface-glass);
+    backdrop-filter: blur(var(--nexus-blur-lg));
+    -webkit-backdrop-filter: blur(var(--nexus-blur-lg));
+    border: 1px solid var(--nexus-border);
+  }
+
+  .nexus-glass-elevated {
+    background: var(--nexus-surface-glass-elevated);
+    backdrop-filter: blur(var(--nexus-blur-xl));
+    -webkit-backdrop-filter: blur(var(--nexus-blur-xl));
+    border: 1px solid var(--nexus-border);
+    box-shadow: var(--nexus-shadow-lg);
+  }
+
+  .nexus-glass-hover {
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .nexus-glass-hover:hover {
+    background: var(--nexus-glass-hover);
+    border-color: var(--nexus-border-hover);
+    box-shadow: var(--nexus-shadow-md);
+  }
+
+  .nexus-panel {
+    background: var(--nexus-surface);
+    border: 1px solid var(--nexus-border);
+    border-radius: var(--nexus-radius-xl);
+    box-shadow: var(--nexus-shadow-sm);
+  }
+
+  .nexus-panel-elevated {
+    background: var(--nexus-surface-elevated);
+    border: 1px solid var(--nexus-border);
+    border-radius: var(--nexus-radius-xl);
+    box-shadow: var(--nexus-shadow-md);
+  }
+
+  .nexus-card {
+    background: var(--nexus-surface);
+    border: 1px solid var(--nexus-border);
+    border-radius: var(--nexus-radius-2xl);
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .nexus-card:hover {
+    border-color: var(--nexus-border-hover);
+    box-shadow: var(--nexus-shadow-lg);
+    transform: translateY(-1px);
+  }
+
+  .nexus-input {
+    background: rgba(13, 17, 23, 0.8);
+    border: 1px solid var(--nexus-border);
+    border-radius: var(--nexus-radius-lg);
+    color: var(--nexus-text-primary);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    transition: all 0.2s ease;
+    outline: none;
+    width: 100%;
+  }
+
+  .nexus-input::placeholder {
+    color: var(--nexus-text-tertiary);
+  }
+
+  .nexus-input:focus {
+    border-color: var(--nexus-brand);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15), var(--nexus-shadow-glow-brand);
+  }
+
+  .nexus-input:hover:not(:focus) {
+    border-color: var(--nexus-border-hover);
+  }
+
+  .nexus-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    border-radius: var(--nexus-radius-lg);
+    transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .nexus-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .nexus-button-primary {
+    background: linear-gradient(135deg, var(--nexus-brand) 0%, var(--nexus-brand-light) 100%);
+    color: white;
+    box-shadow: var(--nexus-shadow-glow-brand);
+  }
+
+  .nexus-button-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 32px -4px rgba(124, 58, 237, 0.5);
+  }
+
+  .nexus-button-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--nexus-shadow-glow-brand);
+  }
+
+  .nexus-button-secondary {
+    background: transparent;
+    color: var(--nexus-text-primary);
+    border: 1px solid var(--nexus-border);
+  }
+
+  .nexus-button-secondary:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--nexus-border-hover);
+  }
+
+  .nexus-button-ghost {
+    background: transparent;
+    color: var(--nexus-text-secondary);
+  }
+
+  .nexus-button-ghost:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--nexus-text-primary);
+  }
+
+  .nexus-button-destructive {
+    background: rgba(244, 63, 94, 0.15);
+    color: var(--nexus-rose);
+    border: 1px solid rgba(244, 63, 94, 0.25);
+  }
+
+  .nexus-button-destructive:hover {
+    background: rgba(244, 63, 94, 0.25);
+    box-shadow: 0 0 20px -4px rgba(244, 63, 94, 0.3);
+  }
+
+  .nexus-badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: var(--nexus-radius-full);
+    padding: 0.125rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+
+  .nexus-badge-default {
+    background: rgba(124, 58, 237, 0.12);
+    color: var(--nexus-brand-light);
+    border-color: rgba(124, 58, 237, 0.25);
+  }
+
+  .nexus-badge-accent {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--nexus-accent);
+    border-color: rgba(56, 189, 248, 0.25);
+  }
+
+  .nexus-badge-emerald {
+    background: rgba(16, 185, 129, 0.12);
+    color: var(--nexus-emerald);
+    border-color: rgba(16, 185, 129, 0.25);
+  }
+
+  .nexus-badge-amber {
+    background: rgba(245, 158, 11, 0.12);
+    color: var(--nexus-amber);
+    border-color: rgba(245, 158, 11, 0.25);
+  }
+
+  .nexus-badge-secondary {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--nexus-text-secondary);
+    border-color: var(--nexus-border);
+  }
+
+  .nexus-divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--nexus-border) 20%,
+      var(--nexus-border) 80%,
+      transparent
+    );
+  }
+
+  .nexus-glow {
+    position: relative;
+  }
+
+  .nexus-glow::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--nexus-brand), var(--nexus-accent), var(--nexus-emerald));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+    filter: blur(8px);
+  }
+
+  .nexus-glow:hover::before {
+    opacity: 0.5;
+  }
+
+  .nexus-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .nexus-shine::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.03) 45%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0.03) 55%,
+      transparent 60%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+    pointer-events: none;
+  }
+
+  .nexus-shine:hover::after {
+    transform: translateX(100%);
+  }
+
+  .nexus-noise {
+    position: relative;
+  }
+
+  .nexus-noise::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
+    pointer-events: none;
+    opacity: 0.4;
+  }
 }
 
-/* Glassmorphism Utilities */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+/* ============================================================
+   KEYFRAME ANIMATIONS
+   ============================================================ */
+
+@keyframes aurora {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(100px, -50px) scale(1.1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(50px, 50px) scale(0.9);
+    opacity: 0.25;
+  }
+  75% {
+    transform: translate(-50px, 100px) scale(1.05);
+    opacity: 0.35;
+  }
 }
 
-.glass-card {
-  background: rgba(30, 41, 59, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+@keyframes aurora-slow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.2;
+  }
+  33% {
+    transform: translate(-80px, 60px) scale(1.15);
+    opacity: 0.3;
+  }
+  66% {
+    transform: translate(80px, -30px) scale(0.95);
+    opacity: 0.15;
+  }
 }
 
-.glass-input {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #f8fafc;
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
-.glass-input:focus {
-  border-color: rgba(59, 130, 246, 0.6);
-  outline: none;
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.25);
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-6px) rotate(0.5deg);
+  }
+  66% {
+    transform: translateY(3px) rotate(-0.3deg);
+  }
 }
 
-/* Custom Scrollbar */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes orbit {
+  0% {
+    transform: rotate(0deg) translateX(120px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(120px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit-reverse {
+  0% {
+    transform: rotate(360deg) translateX(80px) rotate(-360deg);
+  }
+  100% {
+    transform: rotate(0deg) translateX(80px) rotate(0deg);
+  }
+}
+
+@keyframes grid-scroll {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(50px);
+  }
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.02);
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes fade-in-scale {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes slide-in-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ping-large {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes typing-dot {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@keyframes scale-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+/* Animation Utility Classes */
+.animate-aurora {
+  animation: aurora 8s ease-in-out infinite;
+}
+
+.animate-aurora-slow {
+  animation: aurora-slow 12s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.animate-orbit {
+  animation: orbit 12s linear infinite;
+}
+
+.animate-orbit-reverse {
+  animation: orbit-reverse 15s linear infinite;
+}
+
+.animate-breathe {
+  animation: breathe 6s ease-in-out infinite;
+}
+
+.animate-loading-bar {
+  animation: loading-bar 2s ease-in-out infinite;
+}
+
+.animate-typing-dot-1 {
+  animation: typing-dot 1.4s ease-in-out infinite;
+}
+
+.animate-typing-dot-2 {
+  animation: typing-dot 1.4s ease-in-out 0.2s infinite;
+}
+
+.animate-typing-dot-3 {
+  animation: typing-dot 1.4s ease-in-out 0.4s infinite;
+}
+
+/* ============================================================
+   SCROLLBAR STYLING
+   ============================================================ */
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: transparent;
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+
+/* ============================================================
+   TEXT SELECTION
+   ============================================================ */
+
+::selection {
+  background: rgba(124, 58, 237, 0.3);
+  color: white;
+}
+
+/* ============================================================
+   FOCUS RING SYSTEM
+   ============================================================ */
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--nexus-bg), 0 0 0 4px rgba(124, 58, 237, 0.4);
+  border-radius: var(--nexus-radius-md);
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE UTILITIES
+   ============================================================ */
+
+@media (max-width: 640px) {
+  :root {
+    --nexus-radius-xl: 12px;
+    --nexus-radius-2xl: 16px;
+    --nexus-radius-3xl: 20px;
+  }
 }

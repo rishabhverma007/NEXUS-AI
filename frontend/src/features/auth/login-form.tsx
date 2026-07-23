@@ -3,9 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, BrainCircuit, Github, KeyRound, Mail, Lock, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, BrainCircuit, Github, KeyRound, Mail, Lock, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { StarsBackground, GridBackground, AuroraBackground, NoiseOverlay } from "@/components/ui/background";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -23,81 +25,102 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md glass-panel p-8 rounded-3xl border border-slate-800 space-y-6 shadow-2xl">
-      <div className="text-center space-y-2">
-        <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 p-0.5 shadow-glow mx-auto flex items-center justify-center">
-          <div className="h-full w-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-            <BrainCircuit className="h-6 w-6 text-cyan-400" />
-          </div>
-        </div>
-        <h1 className="text-xl font-bold text-slate-100 tracking-tight">Sign in to NEXUS AI</h1>
-        <p className="text-xs text-slate-400">Enterprise AI Knowledge Operating System</p>
-      </div>
+    <>
+      <StarsBackground />
+      <GridBackground />
+      <AuroraBackground />
+      <NoiseOverlay />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-1">
-          <label className="text-[11px] font-medium text-slate-400">Work Email</label>
-          <div className="relative">
-            <Mail className="h-3.5 w-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
-            <Input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="architect@nexus.ai"
-              className="pl-9"
-              required
-            />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+        className="relative z-10 w-full max-w-md"
+      >
+        <div className="nexus-glass-elevated rounded-3xl border border-nexus-border p-8 space-y-6">
+          {/* Logo & Header */}
+          <div className="text-center space-y-3">
+            <div className="h-14 w-14 rounded-2xl bg-gradient-to-tr from-nexus-brand to-nexus-accent p-0.5 shadow-glow-brand mx-auto">
+              <div className="h-full w-full bg-nexus-950 rounded-[14px] flex items-center justify-center">
+                <BrainCircuit className="h-7 w-7 text-nexus-accent" />
+              </div>
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-nexus-50 tracking-tight">Sign in to NEXUS AI</h1>
+              <p className="text-sm text-nexus-400 mt-1">Enterprise AI Knowledge Operating System</p>
+            </div>
           </div>
-        </div>
 
-        <div className="space-y-1">
-          <div className="flex justify-between items-center">
-            <label className="text-[11px] font-medium text-slate-400">Password</label>
-            <Link href="/forgot-password" className="text-[10px] text-cyan-400 hover:underline">
-              Forgot password?
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-nexus-300">Work Email</label>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="architect@nexus.ai"
+                leftIcon={<Mail className="h-4 w-4" />}
+                variant="premium"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <label className="text-xs font-medium text-nexus-300">Password</label>
+                <Link href="/forgot-password" className="text-[11px] text-nexus-accent hover:text-nexus-accent/80 transition-colors">
+                  Forgot password?
+                </Link>
+              </div>
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••••"
+                leftIcon={<Lock className="h-4 w-4" />}
+                variant="premium"
+                required
+              />
+            </div>
+
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              className="w-full"
+              isLoading={isLoading}
+              rightIcon={!isLoading ? <ArrowRight className="h-4 w-4" /> : undefined}
+            >
+              <span>Authenticate</span>
+            </Button>
+          </form>
+
+          {/* SSO Divider */}
+          <div className="relative flex items-center justify-center">
+            <div className="border-t border-nexus-border w-full" />
+            <span className="bg-nexus-950 px-3 text-[10px] text-nexus-500 font-mono uppercase tracking-wider">OR SSO</span>
+          </div>
+
+          {/* SSO Buttons */}
+          <div className="grid grid-cols-2 gap-3">
+            <Button variant="secondary" size="md" leftIcon={<Github className="h-4 w-4" />}>
+              GitHub
+            </Button>
+            <Button variant="secondary" size="md" leftIcon={<KeyRound className="h-4 w-4 text-nexus-accent" />}>
+              Google SSO
+            </Button>
+          </div>
+
+          {/* Signup Link */}
+          <p className="text-xs text-center text-nexus-400">
+            Don&apos;t have an enterprise account?{" "}
+            <Link href="/signup" className="text-nexus-accent hover:text-nexus-accent/80 font-semibold transition-colors">
+              Sign up
             </Link>
-          </div>
-          <div className="relative">
-            <Lock className="h-3.5 w-3.5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••••••"
-              className="pl-9"
-              required
-            />
-          </div>
+          </p>
         </div>
-
-        <Button variant="primary" className="w-full gap-2" isLoading={isLoading} type="submit">
-          <span>Authenticate</span>
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-      </form>
-
-      <div className="relative flex items-center justify-center">
-        <div className="border-t border-slate-800 w-full" />
-        <span className="bg-slate-950 px-3 text-[10px] text-slate-500 font-mono uppercase">OR SINGLE SIGN-ON</span>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <Button variant="outline" size="sm" className="gap-2 text-xs">
-          <Github className="h-4 w-4" />
-          <span>GitHub</span>
-        </Button>
-        <Button variant="outline" size="sm" className="gap-2 text-xs">
-          <KeyRound className="h-4 w-4 text-cyan-400" />
-          <span>Google SSO</span>
-        </Button>
-      </div>
-
-      <p className="text-[11px] text-center text-slate-400">
-        Don't have an enterprise account?{" "}
-        <Link href="/signup" className="text-cyan-400 hover:underline font-semibold">
-          Sign up
-        </Link>
-      </p>
-    </div>
+      </motion.div>
+    </>
   );
 }
