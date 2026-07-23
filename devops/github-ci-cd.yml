@@ -1,0 +1,26 @@
+name: NEXUS AI OS Production CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test_and_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Dependencies
+        run: cd frontend && npm ci
+      - name: Type Check
+        run: cd frontend && npx tsc --noEmit
+      - name: Production Build
+        run: cd frontend && npm run build
+      - name: Docker Build & Push
+        run: |
+          docker build -t nexusai/nexus-os:latest -f devops/Dockerfile frontend/

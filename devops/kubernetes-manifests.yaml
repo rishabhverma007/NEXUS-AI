@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nexus-ai-deployment
+  labels:
+    app: nexus-ai
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nexus-ai
+  template:
+    metadata:
+      labels:
+        app: nexus-ai
+    spec:
+      containers:
+      - name: nexus-ai
+        image: nexusai/nexus-os:v1.16.0
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nexus-ai-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: nexus-ai
