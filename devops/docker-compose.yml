@@ -1,24 +1,55 @@
 version: '3.8'
 
 services:
+  nexus-db:
+    image: ankane/pgvector:v0.5.1
+    container_name: nexus-pgvector-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: nexus_ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - nexus_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  nexus-backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: nexus-fastapi-backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://postgres:postgrespassword@nexus-db:5432/nexus_ai"
+      SECRET_KEY: "nexus-enterprise-secret-key-super-secure-change-in-production-32bytes!"
+      ENVIRONMENT: "production"
+      DEBUG: "false"
+    depends_on:
+      nexus-db:
+        condition: service_healthy
+    restart: unless-stopped
+
   nexus-frontend:
     build:
       context: ../frontend
-      dockerfile: ../devops/Dockerfile
+      dockerfile: Dockerfile
+    container_name: nexus-nextjs-frontend
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
-      - REDIS_URL=redis://redis:6379
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: "http://localhost:8000/api/v1"
+      NEXT_TELEMETRY_DISABLED: "1"
     depends_on:
-      - redis
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis-data:/data
+      - nexus-backend
+    restart: unless-stopped
 
 volumes:
-  redis-data:
+  nexus_pgdata:
