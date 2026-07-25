@@ -3,6 +3,7 @@ import { Header } from "@/components/layout/header";
 import { StatusBar } from "@/components/layout/status-bar";
 import { NotificationDrawer } from "@/features/dashboard/notification-drawer";
 import { PageTransition } from "@/animations/page-transition";
+import { AuthGuard } from "@/providers/auth-provider";
 
 export default function DashboardLayout({
   children,
@@ -23,7 +24,9 @@ export default function DashboardLayout({
         <div className="flex-1 flex flex-col h-full overflow-hidden bg-nexus-950/60 backdrop-blur-sm">
           <Header />
           <main className="flex-1 overflow-y-auto">
-            <PageTransition>{children}</PageTransition>
+            <AuthGuard>
+              <PageTransition>{children}</PageTransition>
+            </AuthGuard>
           </main>
         </div>
       </div>

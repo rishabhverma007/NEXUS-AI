@@ -619,8 +619,8 @@ Response is an SSE stream with events:
 | GET | `/api/v1/documents` | List ingested documents |
 | POST | `/api/v1/documents/upload` | Upload document for chunking |
 | GET | `/api/v1/graph/visualization` | Fetch knowledge graph data |
-| GET | `/api/v1/workspace/{id}` | Get workspace details |
-| POST | `/api/v1/memory/store` | Store memory entry |
+| GET | `/api/v1/workspaces/{workspace_id}` | Get workspace details |
+| POST | `/api/v1/memory` | Store memory entry |
 
 ---
 

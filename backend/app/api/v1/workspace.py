@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.core.db import get_db
@@ -31,6 +31,21 @@ async def list_user_workspaces(
         await db.flush()
         return [default_ws]
     return workspaces
+
+
+@router.get("/{workspace_id}", response_model=WorkspaceResponse)
+async def get_workspace_by_id(
+    workspace_id: str,
+    db: AsyncSession = Depends(get_db),
+    user_payload: TokenPayload = Depends(get_current_user_payload)
+):
+    ws = await db.get(Workspace, workspace_id)
+    if not ws:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Workspace '{workspace_id}' not found"
+        )
+    return ws
 
 
 @router.post("", response_model=WorkspaceResponse)

@@ -23,7 +23,7 @@ export async function streamAgentChat(
     const response = await fetch(`${API_BASE}/chat/stream`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, model, mode }),
+      body: JSON.stringify({ content: prompt, model, agent_mode: mode, workspace_id: "ws_default_01" }),
     });
 
     if (!response.ok) {

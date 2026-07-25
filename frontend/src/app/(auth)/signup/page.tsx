@@ -1,9 +1,9 @@
-import { LoginFormEnhanced } from "@/features/auth/login-form-enhanced";
+import { SignUpForm } from "@/features/auth/signup-form";
 
-export default function LoginPage() {
+export default function SignUpPage() {
   return (
     <div className="relative min-h-screen flex items-center justify-center p-6 overflow-hidden">
-      {/* Ambient backgrounds matching landing page design */}
+      {/* Ambient backgrounds */}
       <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] rounded-full opacity-20 blur-[150px] animate-aurora pointer-events-none"
         style={{ background: "radial-gradient(ellipse at center, rgba(124,58,237,0.25), rgba(56,189,248,0.08) 50%, transparent 70%)" }}
       />
@@ -13,7 +13,7 @@ export default function LoginPage() {
       <div className="absolute top-1/3 right-1/3 w-[1px] h-32 bg-gradient-to-b from-transparent via-nexus-brand/30 to-transparent pointer-events-none" />
       <div className="absolute bottom-1/3 left-1/4 w-[1px] h-24 bg-gradient-to-b from-transparent via-nexus-accent/20 to-transparent pointer-events-none" />
 
-      <LoginFormEnhanced />
+      <SignUpForm />
     </div>
   );
 }

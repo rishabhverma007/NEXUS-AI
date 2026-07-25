@@ -148,11 +148,11 @@ export function HeroSection() {
 
           <Magnetic strength={15} glowColor="rgba(16,185,129,0.12)">
             <Link
-              href="/login"
+              href="/signup"
               className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl border border-nexus-border text-nexus-400 hover:text-nexus-200 font-medium text-sm transition-all duration-300 hover:border-nexus-border-hover hover:bg-white/[0.03]"
             >
               <Sparkles className="h-4 w-4" />
-              <span>Book Demo</span>
+              <span>Get Started Free</span>
             </Link>
           </Magnetic>
         </motion.div>
