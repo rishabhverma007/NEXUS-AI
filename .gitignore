@@ -235,6 +235,9 @@ build/
 .env.test.local
 .env.production.local
 
+# Freebuff local tooling
+.freebuff/
+
 # Python Virtual Environments
 venv/
 backend/venv/
@@ -246,3 +249,10 @@ __pycache__/
 *.sqlite
 *.sqlite3
 backend/*.db
+backend/**/__pycache__/
+
+# SQL schema documentation (frontend reference copy)
+frontend/src/database/
+
+# Redundant deployment files (use root docker-compose.yml)
+devops/
