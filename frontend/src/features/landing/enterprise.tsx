@@ -1,72 +1,130 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Cpu, Lock, Server, Shield, Zap, CheckCircle2 } from "lucide-react";
+import {
+  Shield,
+  CheckCircle2,
+  Lock,
+  Cpu,
+  Server,
+  Zap,
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import {
+  containerVariants,
+  itemVariants,
+} from "@/animations/presets";
+
+const specs = [
+  "SOC-2 Type II Certified Security Architecture",
+  "Isolated Tenant Workspaces & Database Schemas",
+  "Sub-50ms SSE Token Stream Delivery",
+  "Support for Cloud & Local Ollama Models",
+  "Role-Based Access Control (RBAC) Guardrails",
+  "99.99% Uptime SLA for Enterprise Customers",
+];
 
 export function EnterpriseSection() {
-  const specs = [
-    "SOC-2 Type II Certified Security Architecture",
-    "Isolated Tenant Workspaces & Database Schemas",
-    "Sub-50ms SSE Token Stream Delivery",
-    "Support for Cloud (OpenAI/Anthropic) & Local Ollama",
-    "Role-Based Access Control (RBAC) Guardrails",
-    "99.99% Uptime SLA for Enterprise Customers"
-  ];
-
   return (
-    <section className="py-24 px-6 relative border-t border-slate-800/80 bg-slate-950">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div className="space-y-6">
-          <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20">
-            Enterprise Grade Architecture
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-100 tracking-tight leading-snug">
-            Built for High Compliance & Security-Conscious Organizations
-          </h2>
-          <p className="text-sm text-slate-400 leading-relaxed">
-            NEXUS AI ensures absolute tenant isolation, strict encryption at rest and in transit, and local offline AI model deployments via Ollama.
-          </p>
+    <section className="relative py-28 px-6 border-t border-white/5 overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-nexus-500/5 to-transparent pointer-events-none" />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={containerVariants}
+        className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
+      >
+        {/* Left: Text Content */}
+        <div className="space-y-8">
+          <motion.div variants={itemVariants}>
+            <Badge variant="premium" size="md">
+              Enterprise Grade Architecture
+            </Badge>
+          </motion.div>
+          <motion.h2
+            variants={itemVariants}
+            className="text-4xl sm:text-5xl font-extrabold text-slate-100 tracking-tight leading-tight"
+          >
+            Built for{" "}
+            <span className="text-gradient-primary">
+              High Compliance
+            </span>
+            <br />
+            &amp; Security-Conscious Orgs
+          </motion.h2>
+          <motion.p
+            variants={itemVariants}
+            className="text-base text-slate-400 leading-relaxed"
+          >
+            NEXUS AI ensures absolute tenant isolation, strict encryption at
+            rest and in transit, and local offline AI model deployments via
+            Ollama.
+          </motion.p>
+
+          <motion.div
+            variants={itemVariants}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2"
+          >
             {specs.map((spec) => (
-              <div key={spec} className="flex items-center gap-2.5 text-xs text-slate-300">
-                <CheckCircle2 className="h-4 w-4 text-emerald-400 flex-shrink-0" />
+              <div
+                key={spec}
+                className="flex items-center gap-3 text-sm text-slate-300 group"
+              >
+                <CheckCircle2 className="h-4 w-4 text-emerald-400 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
                 <span>{spec}</span>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
-        <div className="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6 bg-slate-900/40 relative overflow-hidden">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-            <div className="flex items-center gap-3">
-              <Shield className="h-6 w-6 text-cyan-400" />
-              <div>
-                <h3 className="text-sm font-semibold text-slate-100">Security Telemetry</h3>
-                <span className="text-[10px] text-slate-400 font-mono">Real-Time Threat Prevention</span>
+        {/* Right: Security Telemetry Panel */}
+        <motion.div variants={itemVariants}>
+          <div className="glass-card rounded-3xl p-8 space-y-6 relative overflow-hidden">
+            {/* Background decoration */}
+            <div className="absolute -top-20 -right-20 w-40 h-40 bg-nexus-500/10 rounded-full blur-[60px]" />
+            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-cyan-500/10 rounded-full blur-[60px]" />
+
+            <div className="flex items-center justify-between border-b border-white/10 pb-4 relative z-[1]">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-xl bg-nexus-500/20 text-nexus-400">
+                  <Shield className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-slate-100">
+                    Security Telemetry
+                  </h3>
+                  <span className="text-xs text-slate-500 font-mono">
+                    Real-Time Threat Prevention
+                  </span>
+                </div>
               </div>
+              <Badge variant="emerald" size="sm">
+                ACTIVE
+              </Badge>
             </div>
-            <span className="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 font-mono text-[10px] font-bold">
-              ENCRYPTED
-            </span>
-          </div>
 
-          <div className="space-y-3 font-mono text-xs">
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between text-slate-300">
-              <span className="text-slate-400">JWT Token Validation</span>
-              <span className="text-emerald-400 font-bold">PASSED (256-bit)</span>
-            </div>
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between text-slate-300">
-              <span className="text-slate-400">Tenant Isolation Scope</span>
-              <span className="text-cyan-400 font-bold">ws_default_01</span>
-            </div>
-            <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between text-slate-300">
-              <span className="text-slate-400">Vector Index Engine</span>
-              <span className="text-indigo-400 font-bold">pgvector HNSW</span>
+            <div className="space-y-3 font-mono text-xs relative z-[1]">
+              {[
+                { label: "JWT Token Validation", value: "PASSED (256-bit)", color: "text-emerald-400" },
+                { label: "Tenant Isolation Scope", value: "ws_default_01", color: "text-cyan-400" },
+                { label: "Vector Index Engine", value: "pgvector HNSW", color: "text-nexus-400" },
+                { label: "Encryption at Rest", value: "AES-256-GCM", color: "text-emerald-400" },
+                { label: "Rate Limiting", value: "10K RPM", color: "text-amber-400" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="p-3 rounded-xl bg-white/5 border border-white/5 flex justify-between items-center"
+                >
+                  <span className="text-slate-400">{item.label}</span>
+                  <span className={`font-bold ${item.color}`}>{item.value}</span>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

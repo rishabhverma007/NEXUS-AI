@@ -1,14 +1,23 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Database, Network, Search, X } from "lucide-react";
+import {
+  Bot,
+  Database,
+  Network,
+  Search,
+  X,
+  Sparkles,
+  ArrowRight,
+} from "lucide-react";
 import { useNexusStore } from "@/stores/nexus-store";
 
 export function CommandMenu() {
   const { isCommandMenuOpen, setCommandMenuOpen } = useNexusStore();
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -24,6 +33,12 @@ export function CommandMenu() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isCommandMenuOpen, setCommandMenuOpen]);
 
+  useEffect(() => {
+    if (isCommandMenuOpen && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isCommandMenuOpen]);
+
   if (!isCommandMenuOpen) return null;
 
   const handleNavigate = (path: string) => {
@@ -33,54 +48,90 @@ export function CommandMenu() {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+        className="fixed inset-0 bg-[#05070A]/80 backdrop-blur-xl z-50 flex items-start justify-center pt-[15vh] px-4"
+        onClick={() => setCommandMenuOpen(false)}
+      >
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          className="w-full max-w-xl glass-panel rounded-2xl border border-slate-800 p-4 shadow-2xl space-y-4"
+          initial={{ opacity: 0, scale: 0.96, y: -10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.96, y: -10 }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="w-full max-w-xl glass-dialog rounded-2xl overflow-hidden shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center gap-3 border-b border-slate-800 pb-3">
-            <Search className="h-4 w-4 text-cyan-400" />
+          {/* Search Input */}
+          <div className="flex items-center gap-3 px-5 py-4 border-b border-white/10">
+            <Search className="h-4 w-4 text-nexus-400 flex-shrink-0" />
             <input
+              ref={inputRef}
               type="text"
               autoFocus
               placeholder="Search agents, knowledge documents, or graph entities..."
-              className="w-full bg-transparent text-slate-100 text-sm focus:outline-none placeholder-slate-500"
+              className="w-full bg-transparent text-sm text-slate-100 focus:outline-none placeholder-slate-500"
             />
-            <button onClick={() => setCommandMenuOpen(false)} className="text-slate-400 hover:text-slate-200">
+            <button
+              onClick={() => setCommandMenuOpen(false)}
+              className="p-1 rounded-md hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-all"
+            >
               <X className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="space-y-2 text-xs">
-            <div className="px-2 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+          {/* Navigation Items */}
+          <div className="p-3 space-y-1">
+            <div className="px-3 py-2 text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
               Quick Navigation
             </div>
-            <button
-              onClick={() => handleNavigate("/chat")}
-              className="w-full p-2.5 rounded-xl hover:bg-slate-900 flex items-center gap-3 text-slate-200 transition-all"
-            >
-              <Bot className="h-4 w-4 text-blue-400" />
-              <span>Agentic RAG Session</span>
-            </button>
-            <button
-              onClick={() => handleNavigate("/knowledge")}
-              className="w-full p-2.5 rounded-xl hover:bg-slate-900 flex items-center gap-3 text-slate-200 transition-all"
-            >
-              <Database className="h-4 w-4 text-emerald-400" />
-              <span>Knowledge Base & Documents</span>
-            </button>
-            <button
-              onClick={() => handleNavigate("/graph")}
-              className="w-full p-2.5 rounded-xl hover:bg-slate-900 flex items-center gap-3 text-slate-200 transition-all"
-            >
-              <Network className="h-4 w-4 text-indigo-400" />
-              <span>3D Knowledge Graph Visualizer</span>
-            </button>
+
+            {[
+              {
+                icon: Bot,
+                label: "Agentic RAG Session",
+                href: "/chat",
+                color: "text-blue-400",
+              },
+              {
+                icon: Database,
+                label: "Knowledge Base & Documents",
+                href: "/knowledge",
+                color: "text-emerald-400",
+              },
+              {
+                icon: Network,
+                label: "3D Knowledge Graph Visualizer",
+                href: "/graph",
+                color: "text-nexus-400",
+              },
+              {
+                icon: Sparkles,
+                label: "Visual AI Studio",
+                href: "/studio",
+                color: "text-pink-400",
+              },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.href}
+                  onClick={() => handleNavigate(item.href)}
+                  className="w-full p-3 rounded-xl hover:bg-white/5 flex items-center gap-3 text-xs text-slate-200 transition-all group"
+                >
+                  <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                    <Icon className={`h-4 w-4 ${item.color}`} />
+                  </div>
+                  <span className="flex-1 text-left">{item.label}</span>
+                  <ArrowRight className="h-3.5 w-3.5 text-slate-500 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+                </button>
+              );
+            })}
           </div>
         </motion.div>
-      </div>
+      </motion.div>
     </AnimatePresence>
   );
 }

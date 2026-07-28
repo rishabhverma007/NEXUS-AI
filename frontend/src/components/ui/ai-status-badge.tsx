@@ -1,24 +1,52 @@
-import { AIState, AI_STATES } from "@/config/ai-states";
-import { ICON_REGISTRY } from "@/config/icons";
-import { Bot, Loader2 } from "lucide-react";
+"use client";
+
+import { type AIState, AI_STATES } from "@/config/ai-states";
+import { cn } from "@/lib/utils";
+import { Loader2, Bot } from "lucide-react";
 
 interface AIStatusBadgeProps {
   state: AIState;
   className?: string;
+  size?: "sm" | "md";
 }
 
-export function AIStatusBadge({ state, className = "" }: AIStatusBadgeProps) {
+export function AIStatusBadge({
+  state,
+  className = "",
+  size = "sm",
+}: AIStatusBadgeProps) {
   const info = AI_STATES[state] || AI_STATES.idle;
-  const isRunning = ["planning", "searching", "retrieving", "reasoning", "calling_tools", "generating", "reflecting", "validating"].includes(state);
+  const isRunning = [
+    "planning",
+    "searching",
+    "retrieving",
+    "reasoning",
+    "calling_tools",
+    "generating",
+    "reflecting",
+    "validating",
+  ].includes(state);
+
+  const sizes = {
+    sm: "px-2.5 py-1 text-[10px] gap-1.5",
+    md: "px-3 py-1.5 text-xs gap-2",
+  };
 
   return (
     <div
-      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${info.bgColor} ${info.borderColor} ${info.color} ${className}`}
+      className={cn(
+        "inline-flex items-center rounded-full border font-semibold",
+        info.bgColor,
+        info.borderColor,
+        info.color,
+        sizes[size],
+        className
+      )}
     >
       {isRunning ? (
-        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        <Loader2 className="h-3 w-3 animate-spin" />
       ) : (
-        <Bot className="h-3.5 w-3.5" />
+        <Bot className="h-3 w-3" />
       )}
       <span>{info.label}</span>
     </div>
