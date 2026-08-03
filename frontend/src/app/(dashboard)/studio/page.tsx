@@ -1,11 +1,11 @@
 import { Metadata } from "next";
-import { AIStudioDashboard } from "@/features/studio/dashboard/ai-studio-dashboard";
+import { CinematicStudio } from "@/features/studio/cinematic-studio";
 
 export const metadata: Metadata = {
-  title: "Enterprise AI Studio | NEXUS AI OS",
-  description: "Low-code visual workflow builder, prompt studio, agent designer & deployment center for NEXUS AI OS.",
+  title: "Visual Low-Code AI Studio | ZHĪ AI OS",
+  description: "Cinematic visual workflow builder: compose and orchestrate the six sovereign ZHĪ AI agents.",
 };
 
 export default function StudioPage() {
-  return <AIStudioDashboard />;
+  return <CinematicStudio />;
 }

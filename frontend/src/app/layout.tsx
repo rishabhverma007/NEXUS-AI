@@ -1,19 +1,29 @@
 import type { Metadata } from "next";
+import { Barlow, Instrument_Serif } from "next/font/google";
 import "@/styles/globals.css";
 import { AppProviders } from "@/providers/app-providers";
 import { CommandMenu } from "@/components/ui/command-menu";
 import { ShortcutsModal } from "@/components/ui/shortcuts-modal";
 
+const barlow = Barlow({
+  weight: ["300", "400", "500", "600"],
+  style: ["normal"],
+  subsets: ["latin"],
+  variable: "--font-barlow",
+  display: "swap",
+});
+
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-instrument-serif",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "NEXUS AI — Enterprise AI Knowledge Operating System",
-  description:
-    "Production-Grade AI Operating System with Multi-Agent RAG, GraphRAG, Long-Term Memory, and Reflection Engine.",
-  openGraph: {
-    title: "NEXUS AI — Enterprise AI Knowledge Operating System",
-    description:
-      "Knowledge. Reasoning. Memory. Agents. Research. Governance. Everything. One Platform.",
-    type: "website",
-  },
+  title: "ZHĪ AI – Enterprise AI Knowledge Operating System",
+  description: "Production-Grade AI Operating System with Multi-Agent RAG, GraphRAG, Long-Term Memory, and Reflection Engine.",
 };
 
 export default function RootLayout({
@@ -22,21 +32,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="antialiased bg-[#05070A] text-slate-100 min-h-screen">
-        {/* Background layers */}
-        <div className="aurora-bg" aria-hidden="true">
-          <div className="aurora-blob" />
-          <div className="aurora-blob" />
-          <div className="aurora-blob" />
-        </div>
-        <div className="grid-overlay" aria-hidden="true" />
-        <div className="noise-overlay" aria-hidden="true" />
-
+    <html lang="en" className={`dark ${barlow.variable} ${instrumentSerif.variable}`}>
+      <body className="antialiased bg-[#05070d] text-slate-100 min-h-screen">
         <AppProviders>
           <CommandMenu />
           <ShortcutsModal />
-          <div className="relative z-[2]">{children}</div>
+          {children}
         </AppProviders>
       </body>
     </html>

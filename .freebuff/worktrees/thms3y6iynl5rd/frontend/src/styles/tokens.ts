@@ -1,0 +1,108 @@
+export const tokens = {
+  colors: {
+    obsidian: {
+      bg: "#030712",
+      card: "#090d16",
+      panel: "rgba(15, 23, 42, 0.65)",
+      border: "rgba(255, 255, 255, 0.08)",
+      primary: "#3b82f6",
+      accent: "#06b6d4",
+      success: "#10b981",
+      warning: "#f59e0b",
+      danger: "#ef4444",
+    },
+    midnight: {
+      bg: "#0b0f19",
+      card: "#111827",
+      panel: "rgba(17, 24, 39, 0.7)",
+      border: "rgba(255, 255, 255, 0.1)",
+      primary: "#6366f1",
+      accent: "#38bdf8",
+      success: "#34d399",
+      warning: "#fbbf24",
+      danger: "#f87171",
+    },
+    aurora: {
+      bg: "#06111e",
+      card: "#0d1b2a",
+      panel: "rgba(13, 27, 42, 0.75)",
+      border: "rgba(6, 182, 212, 0.2)",
+      primary: "#06b6d4",
+      accent: "#a855f7",
+      success: "#10b981",
+      warning: "#f59e0b",
+      danger: "#f43f5e",
+    },
+    carbon: {
+      bg: "#0e0f12",
+      card: "#16181d",
+      panel: "rgba(22, 24, 29, 0.8)",
+      border: "rgba(255, 255, 255, 0.12)",
+      primary: "#f4f4f5",
+      accent: "#a1a1aa",
+      success: "#22c55e",
+      warning: "#eab308",
+      danger: "#ef4444",
+    },
+    cyberpunk: {
+      bg: "#0a0518",
+      card: "#13092b",
+      panel: "rgba(19, 9, 43, 0.8)",
+      border: "rgba(236, 72, 153, 0.25)",
+      primary: "#ec4899",
+      accent: "#8b5cf6",
+      success: "#10b981",
+      warning: "#f59e0b",
+      danger: "#ff0055",
+    },
+  },
+
+  spacing: {
+    xs: "4px",
+    sm: "8px",
+    md: "16px",
+    lg: "24px",
+    xl: "32px",
+    "2xl": "48px",
+    "3xl": "64px",
+  },
+
+  radius: {
+    sm: "6px",
+    md: "10px",
+    lg: "16px",
+    xl: "24px",
+    full: "9999px",
+  },
+
+  blur: {
+    sm: "8px",
+    md: "16px",
+    lg: "24px",
+    xl: "40px",
+  },
+
+  zIndex: {
+    base: 0,
+    header: 20,
+    sidebar: 30,
+    drawer: 40,
+    modal: 50,
+    commandMenu: 60,
+    toast: 70,
+    tooltip: 80,
+  },
+
+  springs: {
+    smooth: { type: "spring", stiffness: 200, damping: 20 },
+    snappy: { type: "spring", stiffness: 350, damping: 25 },
+    bouncy: { type: "spring", stiffness: 400, damping: 15 },
+    slow: { type: "spring", stiffness: 100, damping: 20 },
+  },
+
+  durations: {
+    fast: "150ms",
+    normal: "250ms",
+    slow: "400ms",
+  },
+};

@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  nexus-db:
+    image: ankane/pgvector:v0.5.1
+    container_name: nexus-pgvector-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: nexus_ai
+    ports:
+      - "5432:5432"
+    volumes:
+      - nexus_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  nexus-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: nexus-fastapi-backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://postgres:postgrespassword@nexus-db:5432/nexus_ai"
+      SECRET_KEY: "nexus-enterprise-secret-key-super-secure-change-in-production-32bytes!"
+    depends_on:
+      nexus-db:
+        condition: service_healthy
+
+  nexus-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: nexus-nextjs-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: "http://localhost:8000/api/v1"
+    depends_on:
+      - nexus-backend
+
+volumes:
+  nexus_pgdata:

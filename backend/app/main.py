@@ -143,9 +143,12 @@ app = FastAPI(
 )
 
 # Configure CORS
+# Allow any localhost/127.0.0.1 origin regardless of port, since the Next.js
+# dev server may bind to any free port (e.g. 3000, 53807, ...).
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origin_regex=r"https?://((localhost|127\.0\.0\.1)|\[::1\])(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

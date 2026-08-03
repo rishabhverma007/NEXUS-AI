@@ -20,9 +20,9 @@ export class OrgRepository {
   private static instance: OrgRepository;
 
   private mockOrg: OrganizationItem = {
-    id: "org_nexus_01",
-    name: "NEXUS AI Global Systems",
-    slug: "nexus-ai-global",
+    id: "org_zhi_01",
+    name: "ZHĪ AI Global Systems",
+    slug: "zhi-ai-global",
     industry: "Enterprise AI Systems & Knowledge OS",
     ownerId: "usr_principal_01",
     createdAt: "2026-01-01T00:00:00Z"

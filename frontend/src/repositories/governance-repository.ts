@@ -135,7 +135,7 @@ export class GovernanceRepository {
   ];
 
   private projects: ProjectItem[] = [
-    { id: "proj_01", teamId: "team_01", workspaceId: "ws_default", name: "NEXUS AI OS Core Deployment", status: "active", createdAt: new Date().toISOString() },
+    { id: "proj_01", teamId: "team_01", workspaceId: "ws_default", name: "ZHĪ AI OS Core Deployment", status: "active", createdAt: new Date().toISOString() },
   ];
 
   private policies: GovernancePolicy[] = [

@@ -33,7 +33,7 @@ export class DocumentRepository {
       id: "doc_master_blueprint",
       workspaceId: "ws_default_01",
       collectionId: "col_arch_01",
-      title: "NEXUS AI Master Architecture Blueprint",
+      title: "ZHĪ AI Master Architecture Blueprint",
       sourceType: "markdown",
       mimeType: "text/markdown",
       currentVersion: 2,

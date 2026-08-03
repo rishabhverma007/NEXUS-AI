@@ -7,7 +7,7 @@ import { Sliders, Play, Sparkles, FileText, CheckCircle2, Code } from "lucide-re
 export function PromptPlayground() {
   const { prompts, testResult, testPrompt } = usePromptStudio();
   const [systemPrompt, setSystemPrompt] = useState(
-    "You are Antigravity, an enterprise AI assistant for NEXUS AI OS. Ground every claim using retrieved evidence nodes."
+    "You are Antigravity, an enterprise AI assistant for ZHĪ AI OS. Ground every claim using retrieved evidence nodes."
   );
   const [userTemplate, setUserTemplate] = useState("Context: {vectorContext}\nQuery: {userPrompt}\nAnswer:");
   const [userPromptVal, setUserPromptVal] = useState("Explain GraphRAG 2-hop entity traversal.");

@@ -28,7 +28,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     {
       id: "notif_1",
       title: "System Initialization Complete",
-      message: "NEXUS AI Enterprise Core initialized with 5 active themes and pgvector store.",
+      message: "ZHĪ AI Enterprise Core initialized with 5 active themes and pgvector store.",
       type: "success",
       timestamp: "Just now",
       read: false,

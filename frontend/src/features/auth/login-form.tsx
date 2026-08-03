@@ -30,7 +30,7 @@ export function LoginForm() {
             <BrainCircuit className="h-6 w-6 text-cyan-400" />
           </div>
         </div>
-        <h1 className="text-xl font-bold text-slate-100 tracking-tight">Sign in to NEXUS AI</h1>
+        <h1 className="text-xl font-bold text-slate-100 tracking-tight">Sign in to ZHĪ AI</h1>
         <p className="text-xs text-slate-400">Enterprise AI Knowledge Operating System</p>
       </div>
 
@@ -43,7 +43,7 @@ export function LoginForm() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="architect@nexus.ai"
+              placeholder="architect@zhi.ai"
               className="pl-9"
               required
             />
