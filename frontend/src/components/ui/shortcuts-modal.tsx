@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Command, X, Keyboard } from "lucide-react";
+import { Command, X } from "lucide-react";
 import { useShortcuts } from "@/providers/shortcut-provider";
 
 export function ShortcutsModal() {
@@ -10,7 +10,7 @@ export function ShortcutsModal() {
   if (!isShortcutsModalOpen) return null;
 
   const shortcuts = [
-    { key: "⌘K", action: "Open Command Palette & Knowledge Search" },
+    { key: "⌘ K / Ctrl+K", action: "Open Command Palette & Knowledge Search" },
     { key: "Shift + ?", action: "Toggle Keyboard Shortcuts Cheat Sheet" },
     { key: "Alt + 1", action: "Switch to Agentic RAG Mode" },
     { key: "Alt + 2", action: "Switch to GraphRAG Mode" },
@@ -20,58 +20,37 @@ export function ShortcutsModal() {
 
   return (
     <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-[#05070A]/80 backdrop-blur-xl z-50 flex items-center justify-center p-4"
-        onClick={() => setShortcutsModalOpen(false)}
-      >
+      <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.96 }}
-          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-lg glass-dialog rounded-2xl overflow-hidden"
-          onClick={(e) => e.stopPropagation()}
+          exit={{ opacity: 0, scale: 0.95 }}
+          className="w-full max-w-lg glass-panel rounded-2xl border border-slate-800 p-6 shadow-2xl space-y-6"
         >
-          <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl bg-nexus-500/20 text-nexus-400">
-                <Keyboard className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-slate-100">
-                  Keyboard Shortcuts
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Cheat sheet for quick navigation
-                </p>
-              </div>
+          <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+            <div className="flex items-center gap-2">
+              <Command className="h-5 w-5 text-cyan-400" />
+              <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wider">
+                Keyboard Shortcuts Cheat Sheet
+              </h3>
             </div>
-            <button
-              onClick={() => setShortcutsModalOpen(false)}
-              className="p-2 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-all"
-            >
+            <button onClick={() => setShortcutsModalOpen(false)} className="text-slate-400 hover:text-slate-200">
               <X className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="p-4 space-y-2">
+          <div className="space-y-3">
             {shortcuts.map((sc) => (
-              <div
-                key={sc.key}
-                className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between text-sm"
-              >
-                <span className="text-slate-300">{sc.action}</span>
-                <kbd className="px-2.5 py-1 rounded-lg bg-white/10 border border-white/10 font-mono text-xs text-nexus-400 font-semibold">
+              <div key={sc.key} className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between text-xs">
+                <span className="text-slate-300 font-medium">{sc.action}</span>
+                <kbd className="px-2 py-1 rounded bg-slate-800 border border-slate-700 font-mono text-[10px] text-cyan-400 font-bold">
                   {sc.key}
                 </kbd>
               </div>
             ))}
           </div>
         </motion.div>
-      </motion.div>
+      </div>
     </AnimatePresence>
   );
 }

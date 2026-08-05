@@ -2,30 +2,30 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { 
-  Bot, 
+import {
+  Bot,
   Brain,
-  BrainCircuit, 
-  Building2, 
-  Clock, 
-  Command, 
-  Database, 
-  GitFork, 
-  KeyRound, 
-  MessageSquare, 
-  Network, 
-  Plus, 
+  BrainCircuit,
+  Building2,
+  Clock,
+  Command,
+  Database,
+  KeyRound,
+  MessageSquare,
+  Network,
+  Plus,
   Search,
   Server,
-  Settings, 
-  ShieldCheck, 
-  Sparkles, 
+  Settings,
+  ShieldCheck,
+  Sparkles,
   Users,
   Wrench,
-  Zap
+  Zap,
 } from "lucide-react";
 import { useNexusStore } from "@/stores/nexus-store";
 import { useShortcuts } from "@/providers/shortcut-provider";
+import { cn } from "@/lib/utils";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -51,108 +51,117 @@ export function Sidebar() {
     { label: "Cloud Operations Center", href: "/operations", icon: Server },
     { label: "Workspace Members", href: "/workspace", icon: Users },
     { label: "Organization Settings", href: "/organization", icon: Building2 },
-    { label: "Active Sessions", href: "/sessions", icon: ShieldCheck },
+    { label: "Active Sessions", href: "/sessions", icon: Clock },
     { label: "Audit Logs", href: "/audit", icon: Clock },
     { label: "API Keys", href: "/api-keys", icon: KeyRound },
   ];
 
+  const NavLink = ({ item, compact = false }: { item: (typeof navItems)[number]; compact?: boolean }) => {
+    const Icon = item.icon;
+    const isActive = pathname === item.href;
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        className={cn(
+          "group relative flex items-center gap-3 rounded-xl text-xs font-medium transition-all duration-200",
+          compact ? "px-3 py-2" : "px-3.5 py-2.5",
+          isActive
+            ? "text-white bg-gradient-to-r from-indigo-500/20 to-violet-500/10 border border-indigo-400/30 shadow-glow-violet"
+            : "text-slate-400 hover:text-white hover:bg-white/5 border border-transparent"
+        )}
+      >
+        {/* Active indicator bar */}
+        <span
+          className={cn(
+            "absolute left-0 top-1/2 -translate-y-1/2 h-5 w-[3px] rounded-r-full bg-gradient-to-b from-indigo-400 to-cyan-400 transition-all",
+            isActive ? "opacity-100" : "opacity-0 group-hover:opacity-40"
+          )}
+        />
+        <Icon
+          className={cn(
+            "h-4 w-4 transition-colors",
+            isActive ? "text-cyan-300" : "text-slate-400 group-hover:text-slate-200"
+          )}
+        />
+        <span className="truncate">{item.label}</span>
+      </Link>
+    );
+  };
+
   return (
-    <aside className="w-64 h-full border-r border-slate-800/80 bg-slate-950/90 flex flex-col justify-between p-4 glass-panel z-30 overflow-y-auto">
+    <aside className="w-64 h-full border-r border-white/8 bg-[#05040f]/85 backdrop-blur-xl flex flex-col justify-between p-4 z-30 overflow-y-auto">
       <div className="space-y-6">
-        {/* Workspace Brand Selector */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800/60">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-cyan-400 p-0.5 shadow-glow">
-              <div className="h-full w-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-                <BrainCircuit className="h-5 w-5 text-cyan-400 animate-pulse-slow" />
+        {/* Workspace Brand */}
+        <div className="flex items-center justify-between pb-4 border-b border-white/8">
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="relative h-10 w-10 rounded-2xl bg-gradient-to-tr from-indigo-500 via-violet-500 to-cyan-400 p-[1.5px] shadow-glow-violet">
+              <div className="h-full w-full bg-[#0a0918] rounded-[14px] flex items-center justify-center">
+                <BrainCircuit className="h-5 w-5 text-cyan-300" />
               </div>
+              <span className="absolute -inset-1 rounded-2xl bg-indigo-500/30 blur-md -z-10 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
             <div>
-              <h1 className="font-semibold text-sm text-slate-100 tracking-tight flex items-center gap-1.5">
-                ZHĪ AI
-                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">OS</span>
+              <h1 className="font-display font-semibold text-sm text-white tracking-tight">
+                NEXUS AI
+                <span className="ml-1.5 text-[9px] font-bold px-1.5 py-0.5 rounded bg-gradient-to-r from-indigo-500/25 to-cyan-500/25 text-indigo-200 border border-indigo-400/30 align-middle">
+                  OS
+                </span>
               </h1>
-              <p className="text-[11px] text-slate-400 truncate max-w-[120px]">{currentWorkspace.name}</p>
+              <p className="text-[11px] text-slate-500 truncate max-w-[120px]">{currentWorkspace.name}</p>
             </div>
-          </div>
+          </Link>
         </div>
 
-        {/* New Session Button */}
-        <Link 
+        {/* New Session */}
+        <Link
           href="/chat"
-          className="w-full py-2.5 px-3 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-medium text-xs flex items-center justify-center gap-2 shadow-glow transition-all duration-200"
+          className="shine w-full py-3 px-3 rounded-xl bg-gradient-to-r from-indigo-500 via-violet-500 to-blue-500 hover:from-indigo-400 hover:to-blue-400 text-white font-medium text-xs flex items-center justify-center gap-2 shadow-glow-violet transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
         >
           <Plus className="h-4 w-4" />
           <span>New Session</span>
         </Link>
 
-        {/* Core Operating Engine Navigation */}
+        {/* Core nav */}
         <nav className="space-y-1">
-          <div className="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+          <div className="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-[0.16em] mb-2">
             Core Operating Engine
           </div>
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-3.5 py-2 rounded-lg text-xs font-medium transition-all duration-150 ${
-                  isActive
-                    ? "bg-blue-600/15 text-blue-400 border border-blue-500/30 shadow-glow"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
-                }`}
-              >
-                <Icon className={`h-4 w-4 ${isActive ? "text-cyan-400" : "text-slate-400"}`} />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+          {navItems.map((item) => (
+            <NavLink key={item.href} item={item} />
+          ))}
         </nav>
 
-        {/* Identity & Workspace Navigation */}
-        <nav className="space-y-1 pt-3 border-t border-slate-800/60">
-          <div className="px-3 text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+        {/* Identity nav */}
+        <nav className="space-y-1 pt-3 border-t border-white/8">
+          <div className="px-3 text-[10px] font-bold text-slate-500 uppercase tracking-[0.16em] mb-2">
             Identity & Governance
           </div>
-          {identityItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-3 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 ${
-                  isActive
-                    ? "bg-blue-600/15 text-blue-400 border border-blue-500/30 shadow-glow"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
-                }`}
-              >
-                <Icon className={`h-3.5 w-3.5 ${isActive ? "text-cyan-400" : "text-slate-400"}`} />
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
+          {identityItems.map((item) => (
+            <NavLink key={item.href} item={item} compact />
+          ))}
         </nav>
       </div>
 
-      {/* Shortcuts & Settings Footer */}
-      <div className="pt-4 border-t border-slate-800/60 flex items-center justify-between">
+      {/* Footer */}
+      <div className="pt-4 border-t border-white/8 flex items-center justify-between">
         <button
           onClick={() => setShortcutsModalOpen(true)}
-          className="text-slate-400 hover:text-slate-200 p-1.5 rounded-lg hover:bg-slate-900 flex items-center gap-1.5 text-xs"
+          className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-white/5 flex items-center gap-1.5 text-xs transition-all"
           title="Keyboard Shortcuts (Shift + ?)"
         >
-          <Command className="h-3.5 w-3.5 text-cyan-400" />
+          <Command className="h-3.5 w-3.5 text-cyan-300" />
           <span className="text-[11px]">Shortcuts</span>
         </button>
 
         <Link
           href="/settings"
-          className={`p-1.5 rounded-lg hover:bg-slate-900 transition-colors ${
-            pathname === "/settings" ? "text-cyan-400 bg-slate-900" : "text-slate-400 hover:text-slate-200"
-          }`}
+          className={cn(
+            "p-2 rounded-lg transition-all",
+            pathname === "/settings"
+              ? "text-cyan-300 bg-white/10 border border-cyan-400/20"
+              : "text-slate-400 hover:text-white hover:bg-white/5"
+          )}
           title="Enterprise Settings"
         >
           <Settings className="h-4 w-4" />

@@ -208,7 +208,7 @@ export class ObservabilityRepository {
       workspaceId: "ws_default",
       promptName: "Enterprise Agent RAG System Prompt",
       versionNumber: 3,
-      systemPrompt: "You are Antigravity, an enterprise AI assistant for ZHĪ AI OS. Ground every claim using retrieved evidence nodes.",
+      systemPrompt: "You are Antigravity, an enterprise AI assistant for NEXUS AI OS. Ground every claim using retrieved evidence nodes.",
       userTemplate: "Context: {vectorContext}\nQuery: {userPrompt}\nAnswer:",
       isActive: true,
       authorId: "usr_admin",

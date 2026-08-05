@@ -23,14 +23,14 @@ export function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md glass-panel p-8 rounded-3xl border border-slate-800 space-y-6 shadow-2xl">
+    <div className="w-full max-w-md glow-border rounded-[28px] p-8 space-y-6 shadow-card backdrop-blur-xl">
       <div className="text-center space-y-2">
-        <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 p-0.5 shadow-glow mx-auto flex items-center justify-center">
-          <div className="h-full w-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-            <BrainCircuit className="h-6 w-6 text-cyan-400" />
+        <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-500 via-violet-500 to-cyan-400 p-[1.5px] shadow-glow-violet mx-auto flex items-center justify-center">
+          <div className="h-full w-full bg-[#0a0918] rounded-[14px] flex items-center justify-center">
+            <BrainCircuit className="h-6 w-6 text-cyan-300" />
           </div>
         </div>
-        <h1 className="text-xl font-bold text-slate-100 tracking-tight">Sign in to ZHĪ AI</h1>
+        <h1 className="text-xl font-display font-bold text-white tracking-tight">Sign in to NEXUS AI</h1>
         <p className="text-xs text-slate-400">Enterprise AI Knowledge Operating System</p>
       </div>
 
@@ -43,7 +43,7 @@ export function LoginForm() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="architect@zhi.ai"
+              placeholder="architect@nexus.ai"
               className="pl-9"
               required
             />
@@ -70,15 +70,14 @@ export function LoginForm() {
           </div>
         </div>
 
-        <Button variant="primary" className="w-full gap-2" isLoading={isLoading} type="submit">
+        <Button variant="primary" className="w-full gap-2 shine rounded-2xl" isLoading={isLoading} type="submit">
           <span>Authenticate</span>
           <ArrowRight className="h-4 w-4" />
         </Button>
       </form>
 
       <div className="relative flex items-center justify-center">
-        <div className="border-t border-slate-800 w-full" />
-        <span className="bg-slate-950 px-3 text-[10px] text-slate-500 font-mono uppercase">OR SINGLE SIGN-ON</span>
+        <div className="border-t border-slate-800 w-full" />          <span className="bg-[#0a0918] px-3 text-[10px] text-slate-500 font-mono uppercase">OR SINGLE SIGN-ON</span>
       </div>
 
       <div className="grid grid-cols-2 gap-3">

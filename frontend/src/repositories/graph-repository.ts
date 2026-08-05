@@ -19,7 +19,7 @@ export class GraphRepository {
   private static instance: GraphRepository;
 
   private mockNodes: GraphNodeItem[] = [
-    { id: "node_01", workspaceId: "ws_default_01", name: "ZHĪ AI OS", entityType: "Organization", description: "Enterprise AI Knowledge Operating System" },
+    { id: "node_01", workspaceId: "ws_default_01", name: "NEXUS AI OS", entityType: "Organization", description: "Enterprise AI Knowledge Operating System" },
     { id: "node_02", workspaceId: "ws_default_01", name: "Master Architecture Spec", entityType: "Document", description: "5-Tier Multi-Agent System Architecture" },
     { id: "node_03", workspaceId: "ws_default_01", name: "GraphRAG Traversal Engine", entityType: "Project", description: "2-Hop topological sub-graph traversal" },
     { id: "node_04", workspaceId: "ws_default_01", name: "LangGraph Router Agent", entityType: "Agent", description: "Autonomous Intent Routing Agent" },

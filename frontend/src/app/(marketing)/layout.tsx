@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/layout/navbar";
 import { LandingFooter } from "@/features/landing/footer";
 import { MouseFollowerGlow } from "@/animations/glow";
+import { SmoothScrollProvider } from "@/animations/smooth-scroll";
 
 export default function MarketingLayout({
   children,
@@ -8,11 +9,13 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#05070A] text-slate-100 flex flex-col relative overflow-hidden">
+    <div className="min-h-screen text-slate-100 flex flex-col relative overflow-hidden">
       <MouseFollowerGlow />
-      <Navbar />
-      <main className="flex-1">{children}</main>
-      <LandingFooter />
+      <SmoothScrollProvider>
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <LandingFooter />
+      </SmoothScrollProvider>
     </div>
   );
 }

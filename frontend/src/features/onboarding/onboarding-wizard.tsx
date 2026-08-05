@@ -14,9 +14,9 @@ export function OnboardingWizard() {
   // Form States
   const [displayName, setDisplayName] = useState("Principal Architect");
   const [timezone, setTimezone] = useState("UTC");
-  const [orgName, setOrgName] = useState("ZHĪ AI Global Systems");
+  const [orgName, setOrgName] = useState("NEXUS AI Global Systems");
   const [industry, setIndustry] = useState("Enterprise AI Systems");
-  const [workspaceName, setWorkspaceName] = useState("Zhī Enterprise Core");
+  const [workspaceName, setWorkspaceName] = useState("Nexus Enterprise Core");
   const [workspaceDescription, setWorkspaceDescription] = useState("Primary Knowledge RAG & Multi-Agent Workspace");
 
   const handleFinish = () => {
@@ -144,7 +144,7 @@ export function OnboardingWizard() {
             <div className="h-16 w-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto shadow-glow">
               <CheckCircle2 className="h-8 w-8 animate-bounce" />
             </div>
-            <h2 className="text-lg font-bold text-slate-100">Initializing ZHĪ AI OS...</h2>
+            <h2 className="text-lg font-bold text-slate-100">Initializing NEXUS AI OS...</h2>
             <p className="text-xs text-slate-400">
               Provisioning RLS security policies, vector index namespaces, and multi-agent DAG pipelines...
             </p>

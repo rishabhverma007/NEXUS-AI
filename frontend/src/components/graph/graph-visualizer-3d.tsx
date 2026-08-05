@@ -1,219 +1,84 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Text, Line } from "@react-three/drei";
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer";
 import { motion } from "framer-motion";
 import { Network, RefreshCw, Layers } from "lucide-react";
 import { fetchGraphVisualization } from "@/lib/api";
 import { KGNode, KGEdge, KGVisualizationData } from "@/types/nexus";
 
-interface NodePositions {
-  [key: string]: THREE.Vector3;
-}
+function GraphNodes3D({ nodes, edges, onSelectNode }: { nodes: KGNode[]; edges: KGEdge[]; onSelectNode: (node: KGNode) => void }) {
+  const groupRef = useRef<THREE.Group>(null);
+  const nodePositions = useRef<Record<string, [number, number, number]>>({});
 
-function GraphScene({
-  container,
-  nodes,
-  edges,
-  onSelectNode,
-}: {
-  container: HTMLDivElement;
-  nodes: KGNode[];
-  edges: KGEdge[];
-  onSelectNode: (node: KGNode) => void;
-}) {
-  const width = container.clientWidth;
-  const height = container.clientHeight;
-
-  // Scene
-  const scene = new THREE.Scene();
-
-  // Camera
-  const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
-  camera.position.set(0, 2, 14);
-
-  // WebGL Renderer
-  const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setSize(width, height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x05070d, 0);
-  container.appendChild(renderer.domElement);
-
-  // CSS2D Renderer for labels
-  const labelRenderer = new CSS2DRenderer();
-  labelRenderer.setSize(width, height);
-  labelRenderer.domElement.style.position = "absolute";
-  labelRenderer.domElement.style.top = "0";
-  labelRenderer.domElement.style.pointerEvents = "none";
-  container.appendChild(labelRenderer.domElement);
-
-  // Controls
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.enablePan = true;
-  controls.enableZoom = true;
-  controls.enableRotate = true;
-  controls.autoRotate = true;
-  controls.autoRotateSpeed = 0.5;
-  controls.target.set(0, 0, 0);
-  controls.update();
-
-  // Lights
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-  scene.add(ambientLight);
-  const pointLight = new THREE.PointLight(0xffffff, 1);
-  pointLight.position.set(10, 10, 10);
-  scene.add(pointLight);
-
-  // Compute positions on a sphere
-  const positions: NodePositions = {};
-  const radius = 6;
-  nodes.forEach((node, i) => {
-    const phi = Math.acos(-1 + (2 * i) / Math.max(1, nodes.length));
-    const theta = Math.sqrt(nodes.length * Math.PI) * phi;
-    const x = radius * Math.cos(theta) * Math.sin(phi);
-    const y = radius * Math.sin(theta) * Math.sin(phi);
-    const z = radius * Math.cos(phi);
-    positions[node.id] = new THREE.Vector3(x, y, z);
-  });
-
-  const nodeMeshes: Map<string, THREE.Mesh> = new Map();
-  const labelObjects: CSS2DObject[] = [];
-
-  // Create edges
-  edges.forEach((edge) => {
-    const srcPos = positions[edge.source];
-    const tgtPos = positions[edge.target];
-    if (!srcPos || !tgtPos) return;
-
-    const points = [srcPos.clone(), tgtPos.clone()];
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
-    const material = new THREE.LineBasicMaterial({
-      color: 0x38bdf8,
-      transparent: true,
-      opacity: 0.3,
+  useEffect(() => {
+    const radius = 6;
+    nodes.forEach((node, i) => {
+      const phi = Math.acos(-1 + (2 * i) / Math.max(1, nodes.length));
+      const theta = Math.sqrt(nodes.length * Math.PI) * phi;
+      const x = radius * Math.cos(theta) * Math.sin(phi);
+      const y = radius * Math.sin(theta) * Math.sin(phi);
+      const z = radius * Math.cos(phi);
+      nodePositions.current[node.id] = [x, y, z];
     });
-    const line = new THREE.Line(geometry, material);
-    scene.add(line);
-  });
+  }, [nodes]);
 
-  // Create nodes
-  const raycasterTargets: THREE.Object3D[] = [];
-
-  nodes.forEach((node) => {
-    const pos = positions[node.id] || new THREE.Vector3(0, 0, 0);
-    const isDoc = node.entity_type === "Document";
-
-    const geometry = new THREE.SphereGeometry(isDoc ? 0.4 : 0.25, 16, 16);
-    const material = new THREE.MeshStandardMaterial({
-      color: isDoc ? 0x3b82f6 : 0x06b6d4,
-      emissive: isDoc ? 0x1d4ed8 : 0x0891b2,
-      emissiveIntensity: 0.5,
-      roughness: 0.2,
-    });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.copy(pos);
-    mesh.userData.nodeId = node.id;
-    scene.add(mesh);
-    nodeMeshes.set(node.id, mesh);
-    raycasterTargets.push(mesh);
-
-    // Label
-    const labelDiv = document.createElement("div");
-    labelDiv.textContent = node.name;
-    labelDiv.style.color = "#f8fafc";
-    labelDiv.style.fontSize = "12px";
-    labelDiv.style.fontFamily = "ui-monospace, monospace";
-    labelDiv.style.fontWeight = "600";
-    labelDiv.style.textShadow = "0 0 8px rgba(0,0,0,0.8)";
-    labelDiv.style.background = "rgba(5,7,13,0.6)";
-    labelDiv.style.padding = "2px 8px";
-    labelDiv.style.borderRadius = "4px";
-    labelDiv.style.border = "1px solid rgba(56,189,248,0.2)";
-    labelDiv.style.whiteSpace = "nowrap";
-    labelDiv.style.pointerEvents = "none";
-
-    const label = new CSS2DObject(labelDiv);
-    label.position.set(pos.x, pos.y + 0.6, pos.z);
-    scene.add(label);
-    labelObjects.push(label);
-  });
-
-  // Raycaster for click detection
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
-
-  const handleClick = (event: MouseEvent) => {
-    const rect = renderer.domElement.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(raycasterTargets);
-
-    if (intersects.length > 0) {
-      const hit = intersects[0].object;
-      const nodeId = hit.userData.nodeId;
-      const node = nodes.find((n) => n.id === nodeId);
-      if (node) {
-        onSelectNode(node);
-      }
+  useFrame(() => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += 0.002;
     }
-  };
-  renderer.domElement.addEventListener("click", handleClick);
+  });
 
-  // Animation loop
-  let animationId: number;
-  const animate = () => {
-    controls.update();
-    renderer.render(scene, camera);
-    labelRenderer.render(scene, camera);
-    animationId = requestAnimationFrame(animate);
-  };
-  animate();
+  return (
+    <group ref={groupRef}>
+      {/* Render Edges using Drei Line */}
+      {edges.map((edge) => {
+        const srcPos = nodePositions.current[edge.source];
+        const tgtPos = nodePositions.current[edge.target];
+        if (!srcPos || !tgtPos) return null;
+        return (
+          <Line
+            key={edge.id}
+            points={[srcPos, tgtPos]}
+            color="#38bdf8"
+            lineWidth={1}
+            opacity={0.3}
+            transparent
+          />
+        );
+      })}
 
-  // Resize handler
-  const handleResize = () => {
-    const w = container.clientWidth;
-    const h = container.clientHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w, h);
-    labelRenderer.setSize(w, h);
-  };
-  window.addEventListener("resize", handleResize);
-
-  // Cleanup
-  return () => {
-    cancelAnimationFrame(animationId);
-    window.removeEventListener("resize", handleResize);
-    controls.dispose();
-    renderer.domElement.removeEventListener("click", handleClick);
-    renderer.dispose();
-    labelRenderer.domElement.remove();
-    if (container.contains(renderer.domElement)) {
-      container.removeChild(renderer.domElement);
-    }
-    // Dispose geometries & materials
-    scene.traverse((obj) => {
-      if (obj instanceof THREE.Mesh) {
-        obj.geometry?.dispose();
-        if (Array.isArray(obj.material)) {
-          obj.material.forEach((m) => m.dispose());
-        } else {
-          obj.material?.dispose();
-        }
-      }
-      if (obj instanceof THREE.Line) {
-        obj.geometry?.dispose();
-        obj.material?.dispose();
-      }
-    });
-    labelObjects.forEach((l) => {
-      scene.remove(l);
-    });
-  };
+      {/* Render Nodes */}
+      {nodes.map((node) => {
+        const pos = nodePositions.current[node.id] || [0, 0, 0];
+        const isDoc = node.entity_type === "Document";
+        return (
+          <group key={node.id} position={pos} onClick={(e) => { e.stopPropagation(); onSelectNode(node); }}>
+            <mesh>
+              <sphereGeometry args={[isDoc ? 0.4 : 0.25, 16, 16]} />
+              <meshStandardMaterial
+                color={isDoc ? "#3b82f6" : "#06b6d4"}
+                emissive={isDoc ? "#1d4ed8" : "#0891b2"}
+                emissiveIntensity={0.5}
+                roughness={0.2}
+              />
+            </mesh>
+            <Text
+              position={[0, 0.5, 0]}
+              fontSize={0.25}
+              color="#f8fafc"
+              anchorX="center"
+              anchorY="bottom"
+            >
+              {node.name}
+            </Text>
+          </group>
+        );
+      })}
+    </group>
+  );
 }
 
 export interface GraphVisualizer3DProps {
@@ -221,63 +86,30 @@ export interface GraphVisualizer3DProps {
 }
 
 export function GraphVisualizer3D({ onNodeSelect }: GraphVisualizer3DProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const [data, setData] = useState<KGVisualizationData | null>(null);
   const [selectedNode, setSelectedNode] = useState<KGNode | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const cleanupRef = useRef<(() => void) | null>(null);
-
-  const handleSelectNode = useCallback(
-    (node: KGNode) => {
-      setSelectedNode(node);
-      if (onNodeSelect) {
-        onNodeSelect(node);
-      }
-    },
-    [onNodeSelect]
-  );
 
   useEffect(() => {
-    let cancelled = false;
     async function loadData() {
       try {
         const graphData = await fetchGraphVisualization();
-        if (!cancelled) setData(graphData);
+        setData(graphData);
       } catch (e) {
         console.error("Failed to load GraphRAG data", e);
       } finally {
-        if (!cancelled) setIsLoading(false);
+        setIsLoading(false);
       }
     }
     loadData();
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
-  useEffect(() => {
-    if (!data || !containerRef.current) return;
-
-    // Cleanup previous scene before creating a new one
-    if (cleanupRef.current) {
-      cleanupRef.current();
-      cleanupRef.current = null;
+  const handleSelectNode = (node: KGNode) => {
+    setSelectedNode(node);
+    if (onNodeSelect) {
+      onNodeSelect(node);
     }
-
-    cleanupRef.current = GraphScene({
-      container: containerRef.current,
-      nodes: data.nodes,
-      edges: data.edges,
-      onSelectNode: handleSelectNode,
-    });
-
-    return () => {
-      if (cleanupRef.current) {
-        cleanupRef.current();
-        cleanupRef.current = null;
-      }
-    };
-  }, [data, handleSelectNode]);
+  };
 
   if (isLoading || !data) {
     return (
@@ -290,8 +122,15 @@ export function GraphVisualizer3D({ onNodeSelect }: GraphVisualizer3DProps) {
 
   return (
     <div className="w-full h-full flex relative bg-slate-950/80 rounded-2xl overflow-hidden">
-      {/* 3D Viewport */}
-      <div ref={containerRef} className="flex-1 h-full relative cursor-grab active:cursor-grabbing" />
+      {/* 3D Canvas Viewport */}
+      <div className="flex-1 h-full relative cursor-grab active:cursor-grabbing">
+        <Canvas camera={{ position: [0, 0, 12], fov: 60 }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          <GraphNodes3D nodes={data.nodes} edges={data.edges} onSelectNode={handleSelectNode} />
+          <OrbitControls enablePan enableZoom enableRotate autoRotate autoRotateSpeed={0.5} />
+        </Canvas>
+      </div>
 
       {/* Selected Node Details Sidebar */}
       <div className="w-80 h-full border-l border-slate-800/80 bg-slate-950/90 glass-panel p-5 overflow-y-auto z-10">

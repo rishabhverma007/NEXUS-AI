@@ -43,7 +43,7 @@ export function PageNotFoundState() {
       </div>
       <h2 className="text-xl font-extrabold text-slate-100">404 — Route Not Found</h2>
       <p className="text-xs text-slate-400 leading-relaxed">
-        The system route you are attempting to access does not exist in the ZHĪ AI operating system topology.
+        The system route you are attempting to access does not exist in the NEXUS AI operating system topology.
       </p>
       <Link href="/chat">
         <Button variant="primary" size="sm" className="gap-2">

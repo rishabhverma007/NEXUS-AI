@@ -15,7 +15,7 @@ export default function DashboardOverviewPage() {
       {/* Header Banner */}
       <div>
         <h1 className="text-2xl font-bold text-slate-100 tracking-tight">
-          ZHĪ AI Enterprise Dashboard
+          NEXUS AI Enterprise Dashboard
         </h1>
         <p className="text-xs text-slate-400 mt-1">
           Welcome back, Principal Architect. Overview of active multi-agent RAG pipelines and vector store telemetry.

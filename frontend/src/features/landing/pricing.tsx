@@ -2,194 +2,158 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  containerVariants,
-  itemVariants,
-} from "@/animations/presets";
-
-const plans = [
-  {
-    name: "Starter Architect",
-    price: { monthly: "$59", annual: "$49" },
-    period: "/month",
-    description:
-      "For small teams building modern AI RAG pipelines.",
-    features: [
-      "Up to 5 Workspace Members",
-      "Hybrid Vector Search (pgvector)",
-      "Standard Multi-Agent RAG",
-      "100,000 Token Monthly Quota",
-      "Community Support",
-    ],
-    popular: false,
-    gradient: "from-slate-500/10 to-transparent",
-    borderColor: "border-white/10",
-  },
-  {
-    name: "Enterprise Core",
-    price: { monthly: "$249", annual: "$199" },
-    period: "/month",
-    description:
-      "Complete AI Knowledge OS with GraphRAG & Reflection Engine.",
-    features: [
-      "Unlimited Workspace Members",
-      "3D GraphRAG Visualizer & Traversal",
-      "Reflection Factual Verification",
-      "Long-Term Memory Engine",
-      "Local Ollama & Cloud Model Support",
-      "Dedicated SLA & Support",
-    ],
-    popular: true,
-    gradient: "from-nexus-500/20 via-purple-500/10 to-cyan-500/10",
-    borderColor: "border-nexus-500/50",
-  },
-  {
-    name: "Custom Enterprise",
-    price: { monthly: "Custom", annual: "Custom" },
-    period: "",
-    description:
-      "On-premise deployment, SOC2 compliance, & dedicated GPU clusters.",
-    features: [
-      "Air-Gapped On-Premise Deployment",
-      "Custom Graph Topology Fine-Tuning",
-      "Custom Embedding Models",
-      "24/7 Enterprise Architect Support",
-      "99.99% Uptime Guarantee",
-    ],
-    popular: false,
-    gradient: "from-slate-500/10 to-transparent",
-    borderColor: "border-white/10",
-  },
-];
+import { SectionHeader } from "./section-header";
+import { SpotlightCard } from "@/animations/spotlight-card";
 
 export function PricingSection() {
   const [annual, setAnnual] = useState(true);
 
+  const plans = [
+    {
+      name: "Starter Architect",
+      price: annual ? "$49" : "$59",
+      period: "/month",
+      description: "For small teams building modern AI RAG pipelines.",
+      features: [
+        "Up to 5 Workspace Members",
+        "Hybrid Vector Search (pgvector)",
+        "Standard Multi-Agent RAG",
+        "100,000 Token Monthly Quota",
+        "Community Support",
+      ],
+      popular: false,
+    },
+    {
+      name: "Enterprise Core",
+      price: annual ? "$199" : "$249",
+      period: "/month",
+      description: "Complete AI Knowledge OS with GraphRAG & Reflection Engine.",
+      features: [
+        "Unlimited Workspace Members",
+        "3D GraphRAG Visualizer & Traversal",
+        "Reflection Factual Verification",
+        "Long-Term Memory Engine",
+        "Local Ollama & Cloud Model Support",
+        "Dedicated SLA & Support",
+      ],
+      popular: true,
+    },
+    {
+      name: "Custom Enterprise",
+      price: "Custom",
+      period: "",
+      description: "On-premise deployment, SOC2 compliance & dedicated GPU clusters.",
+      features: [
+        "Air-Gapped On-Premise Deployment",
+        "Custom Graph Topology Fine-Tuning",
+        "Custom Embedding Models",
+        "24/7 Enterprise Architect Support",
+        "99.99% Uptime Guarantee",
+      ],
+      popular: false,
+    },
+  ];
+
   return (
-    <section className="relative py-28 px-6 border-t border-white/5 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-nexus-500/[0.02] to-transparent pointer-events-none" />
+    <section className="relative py-28 px-6 overflow-hidden">
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-violet-600/10 rounded-full blur-[160px] pointer-events-none" />
+      <div className="max-w-6xl mx-auto space-y-14 relative">
+        <SectionHeader
+          eyebrow="Transparent Enterprise Pricing"
+          title={
+            <>
+              Scale Your AI <span className="text-gradient">Knowledge OS</span>
+            </>
+          }
+        />
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        variants={containerVariants}
-        className="max-w-7xl mx-auto space-y-16"
-      >
-        <div className="text-center space-y-4 max-w-2xl mx-auto">
-          <motion.div variants={itemVariants}>
-            <Badge variant="premium" size="md">
-              Transparent Enterprise Pricing
-            </Badge>
-          </motion.div>
-          <motion.h2
-            variants={itemVariants}
-            className="text-4xl sm:text-5xl font-extrabold text-slate-100 tracking-tight"
+        {/* Toggle */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex items-center justify-center gap-4"
+        >
+          <span className={`text-sm ${!annual ? "text-white font-semibold" : "text-slate-400"}`}>Monthly</span>
+          <button
+            onClick={() => setAnnual(!annual)}
+            aria-label="Toggle billing period"
+            className="w-16 h-9 rounded-full bg-white/8 border border-white/15 p-1 flex items-center transition-colors hover:border-indigo-400/40"
           >
-            Scale Your{" "}
-            <span className="text-gradient-primary">
-              AI Operating System
-            </span>
-          </motion.h2>
-
-          <motion.div
-            variants={itemVariants}
-            className="flex items-center justify-center gap-4 pt-2"
-          >
-            <span
-              className={`text-sm font-medium transition-colors ${
-                !annual ? "text-slate-100" : "text-slate-500"
-              }`}
-            >
-              Monthly
-            </span>
-            <button
-              onClick={() => setAnnual(!annual)}
-              className="relative w-14 h-7 rounded-full bg-white/10 border border-white/10 p-1 flex items-center transition-all cursor-pointer"
-            >
-              <motion.div
-                animate={{ x: annual ? 28 : 0 }}
-                transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                className="h-5 w-5 rounded-full bg-gradient-to-r from-nexus-500 to-cyan-500 shadow-lg"
-              />
-            </button>
-            <span
-              className={`text-sm font-medium transition-colors ${
-                annual ? "text-slate-100" : "text-slate-500"
-              }`}
-            >
-              Annual
-              <span className="ml-1.5 text-xs text-emerald-400 font-semibold">
-                Save 20%
-              </span>
-            </span>
-          </motion.div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {plans.map((plan) => (
             <motion.div
-              key={plan.name}
-              variants={itemVariants}
-              className={`glass-card rounded-3xl p-8 flex flex-col justify-between space-y-6 relative bg-gradient-to-b ${plan.gradient} ${plan.borderColor} ${
-                plan.popular ? "shadow-glow-purple scale-[1.02]" : ""
+              layout
+              transition={{ type: "spring", stiffness: 400, damping: 28 }}
+              className={`h-7 w-7 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 shadow-glow ${
+                annual ? "ml-auto" : "ml-0"
               }`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                  <Badge variant="premium" size="md" className="gap-1.5">
-                    <Sparkles className="h-3 w-3 text-amber-400" />
-                    <span>Most Popular</span>
-                  </Badge>
-                </div>
-              )}
+            />
+          </button>
+          <span className={`text-sm ${annual ? "text-white font-semibold" : "text-slate-400"}`}>
+            Annual{" "}
+            <span className="text-emerald-400 text-xs font-mono ml-1 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-400/25">
+              Save 20%
+            </span>
+          </span>
+        </motion.div>
 
-              <div className="space-y-6">
-                <h3 className="text-xl font-bold text-slate-100">
-                  {plan.name}
-                </h3>
-                <p className="text-sm text-slate-400 leading-relaxed">
-                  {plan.description}
-                </p>
-
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-5xl font-extrabold text-slate-100">
-                    {annual ? plan.price.annual : plan.price.monthly}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-7 items-stretch">
+          {plans.map((plan, idx) => (
+            <SpotlightCard key={plan.name} delay={idx * 0.08} className="h-full">
+              <div
+                className={`relative h-full p-8 rounded-[28px] flex flex-col space-y-6 transition-all duration-300 hover:-translate-y-1.5 ${
+                  plan.popular
+                    ? "glow-border shadow-glow-violet"
+                    : "glass-card border-white/8 hover:border-white/20"
+                }`}
+              >
+                {plan.popular && (
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-gradient-to-r from-indigo-500 via-violet-500 to-cyan-400 text-white font-bold text-[10px] uppercase tracking-wider shadow-glow-violet flex items-center gap-1.5 whitespace-nowrap">
+                    <Crown className="h-3 w-3" />
+                    Most Popular
                   </span>
-                  {plan.period && (
-                    <span className="text-sm text-slate-500">
-                      {plan.period}
-                    </span>
-                  )}
+                )}
+
+                <div className="space-y-4">
+                  <h3 className="text-xl font-bold text-white font-display">{plan.name}</h3>
+                  <p className="text-[13px] text-slate-400 leading-relaxed">{plan.description}</p>
+                  <div className="flex items-baseline gap-1.5 pt-2">
+                    <motion.span
+                      key={plan.price}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="font-display text-5xl font-bold text-white tracking-tight"
+                    >
+                      {plan.price}
+                    </motion.span>
+                    <span className="text-sm text-slate-400">{plan.period}</span>
+                  </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/5 space-y-3">
+                <div className="flex-1 pt-4 border-t border-white/10 space-y-3">
                   {plan.features.map((f) => (
-                    <div
-                      key={f}
-                      className="flex items-center gap-3 text-sm text-slate-300"
-                    >
-                      <Check className="h-4 w-4 text-cyan-400 flex-shrink-0" />
-                      <span>{f}</span>
+                    <div key={f} className="flex items-center gap-3 text-[13px] text-slate-300">
+                      <span className="h-5 w-5 rounded-full bg-gradient-to-br from-indigo-500/25 to-cyan-500/25 border border-indigo-400/30 flex items-center justify-center flex-shrink-0">
+                        <Check className="h-3 w-3 text-cyan-300" />
+                      </span>
+                      {f}
                     </div>
                   ))}
                 </div>
-              </div>
 
-              <Button
-                variant={plan.popular ? "gradient" : "glass"}
-                size="lg"
-                className="w-full"
-              >
-                Get Started
-              </Button>
-            </motion.div>
+                <Button
+                  variant={plan.popular ? "primary" : "glass"}
+                  size="lg"
+                  className="w-full rounded-2xl"
+                >
+                  Get Started
+                </Button>
+              </div>
+            </SpotlightCard>
           ))}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

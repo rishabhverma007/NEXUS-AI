@@ -33,8 +33,8 @@ export class HybridRetrievalEngine {
     const mockCandidates = [
       {
         chunkId: "chk_01",
-        documentTitle: "ZHĪ AI Master Architecture Blueprint",
-        content: "ZHĪ AI uses a 5-tier multi-agent architecture with LangGraph, pgvector, and NetworkX sub-graphs.",
+        documentTitle: "NEXUS AI Master Architecture Blueprint",
+        content: "NEXUS AI uses a 5-tier multi-agent architecture with LangGraph, pgvector, and NetworkX sub-graphs.",
         bm25Score: 8.5,
         vectorScore: 0.92,
         pageNumber: 1,

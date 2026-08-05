@@ -6,7 +6,7 @@ export function RecentActivityTable() {
   const activities = [
     {
       id: "act_1",
-      title: "ZHĪ AI Master Architecture Blueprint",
+      title: "NEXUS AI Master Architecture Blueprint",
       type: "Markdown Spec Ingestion",
       status: "Indexed (HNSW)",
       chunks: "12 Chunks",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { aiRuntime } from "@/runtime/sdk/runtime-sdk";
 import { runtimeEventBus } from "@/runtime/events/event-bus";
 import { QualityScore } from "@/repositories/observability-repository";
@@ -10,14 +10,8 @@ export function useQuality() {
   const { currentWorkspace } = useNexusStore();
   const [qualityScore, setQualityScore] = useState<QualityScore | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const isFetchingRef = useRef(false);
 
   const fetchQuality = useCallback(async () => {
-    // Guard against re-entrant calls — calculateLatestScore publishes
-    // QUALITY_UPDATED synchronously, which would loop back here.
-    if (isFetchingRef.current) return;
-    isFetchingRef.current = true;
-
     try {
       setIsLoading(true);
       const score = await aiRuntime.evaluate.report(currentWorkspace.id);
@@ -26,7 +20,6 @@ export function useQuality() {
       console.error("[useQuality] Failed to fetch quality scores:", err);
     } finally {
       setIsLoading(false);
-      isFetchingRef.current = false;
     }
   }, [currentWorkspace.id]);
 

@@ -18,7 +18,7 @@ export class EmbeddingRepository {
     {
       id: "job_emb_01",
       workspaceId: "ws_default_01",
-      documentTitle: "ZHĪ AI Master Architecture Blueprint",
+      documentTitle: "NEXUS AI Master Architecture Blueprint",
       status: "completed",
       totalChunks: 12,
       processedChunks: 12,

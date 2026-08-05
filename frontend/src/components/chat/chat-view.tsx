@@ -6,9 +6,15 @@ import remarkGfm from "remark-gfm";
 import { motion } from "framer-motion";
 import { 
   ArrowUp, 
+  Bot, 
   BrainCircuit, 
+  Copy, 
+  Database, 
   FileText, 
-  Sparkles
+  GitFork, 
+  Layers, 
+  Sparkles, 
+  User 
 } from "lucide-react";
 import { useNexusStore } from "@/stores/nexus-store";
 import { AgentStep, ChatMessage, Citation } from "@/types/nexus";
@@ -22,7 +28,7 @@ export function ChatView() {
     {
       id: "msg_welcome",
       role: "assistant",
-      content: `Welcome to **ZHĪ AI Enterprise Operating System**.\\n\\nI am initialized with **Multi-Agent RAG**, **pgvector Cosine Hybrid Search**, **GraphRAG Traversal**, and **Self-Reflection factual verification**.\\n\\nHow can I assist your enterprise architecture today?`,
+      content: `Welcome to **NEXUS AI Enterprise Operating System**.\n\nI am initialized with **Multi-Agent RAG**, **pgvector Cosine Hybrid Search**, **GraphRAG Traversal**, and **Self-Reflection factual verification**.\n\nHow can I assist your enterprise architecture today?`,
       createdAt: new Date().toISOString()
     }
   ]);
@@ -113,17 +119,7 @@ export function ChatView() {
         }
       );
     } catch (err) {
-      console.error("Backend unavailable:", err);
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === assistantMsgId
-            ? {
-                ...msg,
-                content: `⚠️ **Backend Unavailable**\n\nI couldn't reach the ZHĪ AI API server through the frontend proxy. The backend needs to be running for chat to work.\n\nTo start it, open a terminal and run:\n\`\`\`bash\ncd backend && uvicorn main:app --reload\n\`\`\`\n\nOnce the server is running, send your prompt again and I'll respond with full Multi-Agent RAG, GraphRAG traversal, and factual verification.`
-              }
-            : msg
-        )
-      );
+      console.error("Streaming error:", err);
       setIsStreaming(false);
     }
   };
@@ -208,7 +204,7 @@ export function ChatView() {
                     handleSendPrompt();
                   }
                 }}
-                placeholder="Ask ZHĪ AI (e.g. 'Analyze GraphRAG relationships and memory indices for multi-agent architecture')..."
+                placeholder="Ask NEXUS AI (e.g. 'Analyze GraphRAG relationships and memory indices for multi-agent architecture')..."
                 className="w-full bg-transparent text-slate-100 text-sm placeholder-slate-500 p-3 resize-none focus:outline-none min-h-[60px]"
                 rows={2}
               />

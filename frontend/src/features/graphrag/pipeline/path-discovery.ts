@@ -10,7 +10,7 @@ export class PathDiscovery {
     return [
       {
         id: "path_01",
-        pathChain: ["ZHĪ AI OS", "Master Architecture Spec", "GraphRAG Traversal Engine"],
+        pathChain: ["NEXUS AI OS", "Master Architecture Spec", "GraphRAG Traversal Engine"],
         relations: ["contains", "references"],
         pathWeight: 0.94,
       },

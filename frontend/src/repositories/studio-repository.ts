@@ -131,7 +131,7 @@ export class StudioRepository {
       projectId: "proj_01",
       workspaceId: "ws_default",
       name: "Enterprise Multi-Agent RAG System Prompt",
-      systemPrompt: "You are Antigravity, an enterprise AI assistant for ZHĪ AI OS. Ground every claim using retrieved evidence nodes.",
+      systemPrompt: "You are Antigravity, an enterprise AI assistant for NEXUS AI OS. Ground every claim using retrieved evidence nodes.",
       userTemplate: "Context: {vectorContext}\nQuery: {userPrompt}\nAnswer:",
       variables: ["vectorContext", "userPrompt"],
       modelId: "gemini-3.6-flash",
