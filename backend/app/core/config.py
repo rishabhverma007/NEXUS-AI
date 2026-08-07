@@ -39,6 +39,14 @@ class Settings(BaseSettings):
     DEFAULT_EMBEDDING_MODEL: str = "text-embedding-3-small"
     EMBEDDING_DIMENSION: int = 1536
 
+    # Rate Limiting — in-memory sliding window (single instance). Disable only
+    # for local demos or when a reverse proxy already enforces limits.
+    RATE_LIMIT_ENABLED: bool = True
+    # Only honor X-Forwarded-For when the app sits behind a trusted reverse
+    # proxy. When False (default) the raw socket peer is used, so clients
+    # cannot spoof the header to bypass per-IP limits.
+    RATE_LIMIT_TRUST_FORWARDED_HEADERS: bool = False
+
     # GraphRAG & Hybrid Search Settings
     HYBRID_SEARCH_TOP_K: int = 10
     GRAPH_SEARCH_MAX_DEPTH: int = 2

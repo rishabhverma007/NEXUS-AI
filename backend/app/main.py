@@ -2,6 +2,7 @@ import sys
 import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+import secrets
 import uvicorn
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
@@ -10,70 +11,74 @@ from fastapi.responses import JSONResponse
 
 from app.core.config import settings
 from app.core.db import engine, Base, AsyncSessionLocal
-from app.api.v1 import chat, knowledge, graph, workspace, memory
-from app.models.domain import Workspace, KnowledgeGraphEntity, KnowledgeGraphRelation
-from app.services.doc_processor import doc_processor
-from app.services.memory_service import memory_service
-from app.seed_data import SEED_DOCUMENTS, SEED_ENTITIES, SEED_RELATIONS, SEED_MEMORIES
+from app.core.rate_limit import RateLimitMiddleware
+from app.core.security import get_password_hash
+from app.api.v1 import chat, knowledge, graph, workspace, memory, auth
+from app.models.domain import User, Workspace
+from app.services.seeder import seed_corpus_for_workspace
 from app.services.llm import (
     is_embedding_configured,
     is_model_available,
     MODEL_REGISTRY,
 )
 
+# The dev-fallback identity used by permissive endpoints when no token is sent
+# (see get_current_user_payload). We materialize it as a real row on first
+# boot so the default workspace's owner_id satisfies foreign-key constraints
+# on Postgres as well as SQLite.
+DEV_USER_ID = "user_dev_nexus_01"
+DEV_USER_EMAIL = "dev@nexus.local"
+DEFAULT_WORKSPACE_ID = "ws_default_01"
+
 
 async def seed_initial_workspace_data():
     """
-    Seed the default workspace with the enterprise corpus on first boot:
-    documents, knowledge graph entities/relations, and long-term memories.
+    First-boot bootstrap: ensure the dev user exists, create the default
+    workspace if missing, then load the enterprise corpus into it.
+
+    The dev-user check runs even when the workspace already exists (e.g. a DB
+    created before users were materialized) so the demo-fallback identity is
+    always a real row — required for foreign keys on Postgres.
     """
     async with AsyncSessionLocal() as session:
-        # Check if default workspace exists (fresh installs only)
-        res = await session.get(Workspace, "ws_default_01")
-        if not res:
-            ws = Workspace(
-                id="ws_default_01",
+        dev_user = await session.get(User, DEV_USER_ID)
+        if not dev_user:
+            # Unusable random hash — this identity is for the demo fallback,
+            # not for real logins.
+            session.add(
+                User(
+                    id=DEV_USER_ID,
+                    email=DEV_USER_EMAIL,
+                    full_name="Development Sandbox",
+                    hashed_password=get_password_hash(secrets.token_urlsafe(32)),
+                )
+            )
+
+        workspace = await session.get(Workspace, DEFAULT_WORKSPACE_ID)
+        if workspace:
+            await session.commit()
+            return
+
+        session.add(
+            Workspace(
+                id=DEFAULT_WORKSPACE_ID,
                 name="Nexus Enterprise AI Core",
                 slug="nexus-enterprise-core",
                 description="Default Enterprise Knowledge Workspace for Multi-Agent RAG & Graph Systems",
-                owner_id="user_dev_nexus_01"
+                owner_id=DEV_USER_ID,
             )
-            session.add(ws)
-            await session.flush()
+        )
+        await session.flush()
 
-            # Knowledge graph
-            session.add_all(
-                KnowledgeGraphEntity(workspace_id="ws_default_01", **ent)
-                for ent in SEED_ENTITIES
-            )
-            session.add_all(
-                KnowledgeGraphRelation(workspace_id="ws_default_01", **rel)
-                for rel in SEED_RELATIONS
-            )
-
-            # Documents (real embedding when configured, mock otherwise)
-            for doc_in in SEED_DOCUMENTS:
-                await doc_processor.process_and_ingest_document(
-                    session=session,
-                    workspace_id="ws_default_01",
-                    title=doc_in["title"],
-                    content=doc_in["content"],
-                    source_type=doc_in.get("source_type", "markdown"),
-                    metadata=doc_in.get("metadata", {}),
-                )
-
-            # Long-term memory
-            for mem in SEED_MEMORIES:
-                await memory_service.store_memory(
-                    session=session,
-                    workspace_id="ws_default_01",
-                    user_id="user_dev_nexus_01",
-                    memory_type=mem["memory_type"],
-                    key=mem["key"],
-                    value=mem["value"],
-                )
-
-            await session.commit()
+        # Keep the original deterministic seed ids (ent_01...) for the default
+        # workspace; only per-user workspaces get remapped UUIDs.
+        await seed_corpus_for_workspace(
+            session=session,
+            workspace_id=DEFAULT_WORKSPACE_ID,
+            owner_id=DEV_USER_ID,
+            keep_seed_ids=True,
+        )
+        await session.commit()
 
 
 @asynccontextmanager
@@ -81,7 +86,7 @@ async def lifespan(app: FastAPI):
     # Initialize Database Tables
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-    
+
     await seed_initial_workspace_data()
     yield
 
@@ -101,6 +106,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Per-IP sliding-window rate limiting (login/register brute-force protection
+# + a general API ceiling). Disable via RATE_LIMIT_ENABLED=false if a reverse
+# proxy already enforces limits.
+app.add_middleware(RateLimitMiddleware)
 
 
 @app.get("/")
@@ -161,6 +171,7 @@ async def readiness_health_check():
 
 
 # Include V1 API Routers
+app.include_router(auth.router, prefix=settings.API_V1_STR)
 app.include_router(chat.router, prefix=settings.API_V1_STR)
 app.include_router(knowledge.router, prefix=settings.API_V1_STR)
 app.include_router(graph.router, prefix=settings.API_V1_STR)

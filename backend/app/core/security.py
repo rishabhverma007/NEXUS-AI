@@ -10,6 +10,11 @@ from app.core.config import settings
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login", auto_error=False)
 
+# Precomputed bcrypt hash used when a login email does NOT exist, so both
+# branches of the login path do the same bcrypt work — avoids timing-based
+# user enumeration. The password it hashes is never used for anything.
+DUMMY_PASSWORD_HASH = "$2b$12$A2CB./28w77j4sQT7QiEteETyAsk2pLuECZN5F9gMNOFCQOh7lPeS"
+
 
 class TokenPayload(BaseModel):
     sub: Optional[str] = None
@@ -62,6 +67,41 @@ async def get_current_user_payload(token: Optional[str] = Depends(oauth2_scheme)
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+
+async def get_authenticated_user_payload(token: Optional[str] = Depends(oauth2_scheme)) -> TokenPayload:
+    """
+    Strict authentication dependency: 401 for missing, invalid, or expired
+    tokens — no development fallback. Used by endpoints that MUST be locked
+    down (e.g. /auth/me). Regular data endpoints keep the permissive
+    get_current_user_payload so the no-keys demo still boots.
+    """
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    try:
+        payload = jwt.decode(
+            token, settings.effective_secret_key, algorithms=[settings.ALGORITHM]
+        )
+        token_data = TokenPayload(**payload)
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    if token_data.exp and datetime.fromtimestamp(
+        token_data.exp, tz=timezone.utc
+    ) < datetime.now(timezone.utc):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return token_data
 
 
 def check_rbac_permission(required_role: str = "member"):
