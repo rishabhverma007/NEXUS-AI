@@ -2,9 +2,12 @@ import type {
   AgentStep,
   AuthResponse,
   AuthUser,
+  ChatThread,
   Citation,
   KGVisualizationData,
   KnowledgeDocument,
+  Stats,
+  ThreadMessage,
   Workspace,
 } from "@/types/nexus";
 
@@ -125,6 +128,24 @@ export function fetchWorkspaces(): Promise<Workspace[]> {
   return apiFetch<Workspace[]>("/workspaces");
 }
 
+// --- Chat threads & history -------------------------------------------------
+
+export function fetchThreads(): Promise<ChatThread[]> {
+  return apiFetch<ChatThread[]>("/chat/threads");
+}
+
+export function fetchThreadMessages(threadId: string): Promise<ThreadMessage[]> {
+  return apiFetch<ThreadMessage[]>(
+    `/chat/threads/${encodeURIComponent(threadId)}/messages`
+  );
+}
+
+// --- Dashboard statistics ---------------------------------------------------
+
+export function fetchStats(): Promise<Stats> {
+  return apiFetch<Stats>("/stats");
+}
+
 // --- Chat / agent streaming --------------------------------------------------
 
 interface StreamDoneData {
@@ -134,7 +155,8 @@ interface StreamDoneData {
 }
 
 interface StreamEvent {
-  type: "agent_step" | "token" | "done" | "error";
+  type: "thread" | "agent_step" | "token" | "done" | "error";
+  thread_id?: string;
   step?: AgentStep;
   content?: string;
   citations?: Citation[];
@@ -157,13 +179,16 @@ function parseSseLine(line: string): StreamEvent | null {
 
 /**
  * Stream an agentic chat response over SSE.
- * Invokes onStep for each agent step, onToken for each streamed token,
- * and onDone with the final citations + reflection score.
+ * Pass an existing threadId to continue a conversation, or null to auto-create
+ * one (the backend emits a `thread` frame with the new id).
+ * Invokes onStep/onToken/onDone as before.
  */
 export async function streamAgentChat(
   prompt: string,
   modelId: string,
   agentMode: string,
+  threadId: string | null,
+  onThread: (threadId: string) => void,
   onStep: (step: AgentStep) => void,
   onToken: (token: string) => void,
   onDone: (data: StreamDoneData) => void
@@ -176,6 +201,7 @@ export async function streamAgentChat(
     method: "POST",
     headers,
     body: JSON.stringify({
+      thread_id: threadId,
       workspace_id: getWorkspaceId(),
       content: prompt,
       model: modelId,
@@ -209,6 +235,9 @@ export async function streamAgentChat(
         const event = parseSseLine(line);
         if (!event) continue;
         switch (event.type) {
+          case "thread":
+            if (event.thread_id) onThread(event.thread_id);
+            break;
           case "agent_step":
             if (event.step) onStep(event.step);
             break;

@@ -302,6 +302,10 @@ export class AIRuntimeSDK {
         prompt,
         modelId,
         agentMode,
+        null, // SDK-level streams auto-create a persisted thread on the backend
+        () => {
+          // Thread id created by the backend — not tracked at SDK level.
+        },
         (step) => {
           streamManager.emitReasoning(step.thought);
         },

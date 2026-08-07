@@ -13,7 +13,7 @@ from app.core.config import settings
 from app.core.db import engine, Base, AsyncSessionLocal
 from app.core.rate_limit import RateLimitMiddleware
 from app.core.security import get_password_hash
-from app.api.v1 import chat, knowledge, graph, workspace, memory, auth
+from app.api.v1 import chat, knowledge, graph, workspace, memory, auth, stats
 from app.models.domain import User, Workspace
 from app.services.seeder import seed_corpus_for_workspace
 from app.services.llm import (
@@ -177,6 +177,7 @@ app.include_router(knowledge.router, prefix=settings.API_V1_STR)
 app.include_router(graph.router, prefix=settings.API_V1_STR)
 app.include_router(workspace.router, prefix=settings.API_V1_STR)
 app.include_router(memory.router, prefix=settings.API_V1_STR)
+app.include_router(stats.router, prefix=settings.API_V1_STR)
 
 if __name__ == "__main__":
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)

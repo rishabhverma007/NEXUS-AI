@@ -50,6 +50,40 @@ export interface ChatThread {
   model: string;
   agent_mode: AgentMode;
   updated_at: string;
+  message_count?: number;
+}
+
+export interface ThreadMessage {
+  id: string;
+  thread_id: string;
+  role: "user" | "assistant" | "system";
+  content: string;
+  agent_steps: AgentStep[];
+  citations: Citation[];
+  reflection_score: number | null;
+  created_at: string;
+}
+
+export interface Stats {
+  workspace_id: string;
+  counts: {
+    documents: number;
+    chunks: number;
+    graph_entities: number;
+    graph_relations: number;
+    memories: number;
+    threads: number;
+    messages: number;
+    workspaces: number;
+  };
+  avg_reflection_score: number | null;
+  recent_activity: {
+    type: "document" | "thread" | "memory";
+    title: string;
+    detail: string;
+    status: string;
+    timestamp: string;
+  }[];
 }
 
 export interface KnowledgeDocument {

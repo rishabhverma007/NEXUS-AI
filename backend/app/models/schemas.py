@@ -54,7 +54,8 @@ class WorkspaceResponse(WorkspaceBase):
 # Chat & Agent Schemas
 class ChatMessageCreate(BaseModel):
     thread_id: Optional[str] = None
-    workspace_id: str = "ws_default_01"
+    # None -> the authenticated user's workspace is used (per-user isolation).
+    workspace_id: Optional[str] = None
     content: str
     model: str = "gpt-4o"
     agent_mode: str = "agentic_rag"  # agentic_rag, graph_rag, memory_search, deep_research

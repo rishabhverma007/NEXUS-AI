@@ -4,48 +4,102 @@ import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { motion } from "framer-motion";
-import { 
-  ArrowUp, 
-  Bot, 
-  BrainCircuit, 
-  Copy, 
-  Database, 
-  FileText, 
-  GitFork, 
-  Layers, 
-  Sparkles, 
-  User 
+import {
+  ArrowUp,
+  BrainCircuit,
+  FileText,
+  MessageSquare,
+  Plus,
+  Sparkles,
 } from "lucide-react";
 import { useNexusStore } from "@/stores/nexus-store";
 import { AgentStep, ChatMessage, Citation } from "@/types/nexus";
-import { streamAgentChat } from "@/lib/api";
+import { fetchThreadMessages, fetchThreads, streamAgentChat } from "@/lib/api";
+import { cn } from "@/lib/utils";
 import { AgentDrawer } from "./agent-drawer";
 
-export function ChatView() {
-  const { activeMode, selectedModel } = useNexusStore();
-  const [inputPrompt, setInputPrompt] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "msg_welcome",
-      role: "assistant",
-      content: `Welcome to **NEXUS AI Enterprise Operating System**.\n\nI am initialized with **Multi-Agent RAG**, **pgvector Cosine Hybrid Search**, **GraphRAG Traversal**, and **Self-Reflection factual verification**.\n\nHow can I assist your enterprise architecture today?`,
-      createdAt: new Date().toISOString()
-    }
-  ]);
+const WELCOME_MESSAGE: ChatMessage = {
+  id: "msg_welcome",
+  role: "assistant",
+  content: `Welcome to **NEXUS AI Enterprise Operating System**.\n\nI am initialized with **Multi-Agent RAG**, **pgvector Cosine Hybrid Search**, **GraphRAG Traversal**, and **Self-Reflection factual verification**. Conversations are persisted per thread — pick one on the left or start fresh.\n\nHow can I assist your enterprise architecture today?`,
+  createdAt: new Date().toISOString(),
+};
 
+export function ChatView() {
+  const {
+    activeMode,
+    selectedModel,
+    threads,
+    setThreads,
+    activeThreadId,
+    setActiveThreadId,
+  } = useNexusStore();
+
+  const [inputPrompt, setInputPrompt] = useState("");
+  const [messages, setMessages] = useState<ChatMessage[]>([WELCOME_MESSAGE]);
   const [currentSteps, setCurrentSteps] = useState<AgentStep[]>([]);
   const [currentCitations, setCurrentCitations] = useState<Citation[]>([]);
   const [reflectionScore, setReflectionScore] = useState<number | undefined>(undefined);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  // Mirror of currentSteps that stays current inside the streaming callbacks
+  // (avoids the stale-closure where onDone misses the final step update).
+  const stepsRef = useRef<AgentStep[]>([]);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  const refreshThreads = async () => {
+    try {
+      setThreads(await fetchThreads());
+    } catch {
+      // Backend unavailable — keep whatever we have.
+    }
   };
 
+  // Load the conversation list on mount.
   useEffect(() => {
-    scrollToBottom();
+    refreshThreads();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, currentSteps]);
+
+  const loadThread = async (threadId: string) => {
+    if (threadId === activeThreadId || isStreaming) return;
+    setActiveThreadId(threadId);
+    setIsLoadingHistory(true);
+    setCurrentSteps([]);
+    setCurrentCitations([]);
+    setReflectionScore(undefined);
+    setMessages([WELCOME_MESSAGE]);
+    try {
+      const history = await fetchThreadMessages(threadId);
+      const saved: ChatMessage[] = history.map((m) => ({
+        id: m.id,
+        role: m.role,
+        content: m.content,
+        agentSteps: m.agent_steps,
+        citations: m.citations,
+        reflectionScore: m.reflection_score ?? undefined,
+        createdAt: m.created_at,
+      }));
+      setMessages([WELCOME_MESSAGE, ...saved]);
+    } catch {
+      // History fetch failed — leave the welcome message.
+    } finally {
+      setIsLoadingHistory(false);
+    }
+  };
+
+  const startNewThread = () => {
+    if (isStreaming) return;
+    setActiveThreadId(null);
+    setMessages([WELCOME_MESSAGE]);
+    setCurrentSteps([]);
+    setCurrentCitations([]);
+    setReflectionScore(undefined);
+  };
 
   const handleSendPrompt = async () => {
     if (!inputPrompt.trim() || isStreaming) return;
@@ -54,7 +108,7 @@ export function ChatView() {
       id: `usr_${Date.now()}`,
       role: "user",
       content: inputPrompt,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -64,13 +118,14 @@ export function ChatView() {
     setCurrentSteps([]);
     setCurrentCitations([]);
     setReflectionScore(undefined);
+    stepsRef.current = [];
 
     const assistantMsgId = `asst_${Date.now()}`;
     const initialAssistantMsg: ChatMessage = {
       id: assistantMsgId,
       role: "assistant",
       content: "",
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     setMessages((prev) => [...prev, initialAssistantMsg]);
@@ -80,15 +135,20 @@ export function ChatView() {
         promptToSubmit,
         selectedModel,
         activeMode,
+        activeThreadId,
+        (tid) => {
+          setActiveThreadId(tid);
+          void refreshThreads();
+        },
         (step) => {
           setCurrentSteps((prev) => {
             const idx = prev.findIndex((s) => s.step_id === step.step_id);
-            if (idx >= 0) {
-              const updated = [...prev];
-              updated[idx] = step;
-              return updated;
-            }
-            return [...prev, step];
+            const updated =
+              idx >= 0
+                ? [...prev.slice(0, idx), step, ...prev.slice(idx + 1)]
+                : [...prev, step];
+            stepsRef.current = updated;
+            return updated;
           });
         },
         (token) => {
@@ -110,12 +170,13 @@ export function ChatView() {
                     ...msg,
                     citations: data.citations,
                     reflectionScore: data.reflection_score,
-                    agentSteps: currentSteps
+                    agentSteps: stepsRef.current,
                   }
                 : msg
             )
           );
           setIsStreaming(false);
+          void refreshThreads();
         }
       );
     } catch (err) {
@@ -127,7 +188,44 @@ export function ChatView() {
   return (
     <div className="flex h-[calc(100vh-4rem)] w-full overflow-hidden bg-slate-950">
       {/* Main Conversation Stream */}
-      <div className="flex-1 flex flex-col justify-between h-full relative">
+      <div className="flex-1 flex flex-col justify-between h-full relative min-w-0">
+        {/* Thread switcher */}
+        <div className="flex items-center gap-2 px-6 pt-4 max-w-4xl mx-auto w-full overflow-x-auto no-scrollbar">
+          <button
+            onClick={startNewThread}
+            className={cn(
+              "shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-medium transition-all",
+              !activeThreadId
+                ? "bg-gradient-to-r from-blue-600 to-indigo-600 border-blue-500 text-white shadow-glow"
+                : "bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700"
+            )}
+          >
+            <Plus className="h-3 w-3" />
+            New
+          </button>
+          {threads.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => loadThread(t.id)}
+              title={`${t.title} — ${t.message_count ?? 0} messages`}
+              className={cn(
+                "shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] font-medium transition-all max-w-[220px]",
+                activeThreadId === t.id
+                  ? "bg-indigo-500/20 border-indigo-400/40 text-indigo-200"
+                  : "bg-slate-900/70 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700"
+              )}
+            >
+              <MessageSquare className="h-3 w-3 shrink-0" />
+              <span className="truncate">{t.title}</span>
+              {typeof t.message_count === "number" && t.message_count > 0 && (
+                <span className="text-[9px] text-slate-500 font-mono shrink-0">
+                  {t.message_count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {messages.map((msg) => (
             <motion.div
@@ -188,6 +286,11 @@ export function ChatView() {
               )}
             </motion.div>
           ))}
+          {isLoadingHistory && (
+            <div className="flex justify-center pt-4">
+              <div className="h-5 w-5 rounded-full border-2 border-blue-400/30 border-t-blue-400 animate-spin" />
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
 
