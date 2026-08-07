@@ -1,5 +1,13 @@
 version: "3.8"
 
+# NEXUS AI full stack — Postgres+pgvector, FastAPI backend, Next.js frontend.
+#
+# Secrets: copy `.env` from `backend/.env.example` into the repo root (or
+# export the vars below) BEFORE `docker compose up`. SECRET_KEY has no safe
+# default — the backend refuses to start in production without it.
+#
+#   cp backend/.env.example .env   # then fill in SECRET_KEY + API keys
+
 services:
   nexus-db:
     image: ankane/pgvector:v0.5.1
@@ -26,8 +34,13 @@ services:
     ports:
       - "8000:8000"
     environment:
+      ENVIRONMENT: production
       DATABASE_URL: "postgresql+asyncpg://postgres:postgrespassword@nexus-db:5432/nexus_ai"
-      SECRET_KEY: "nexus-enterprise-secret-key-super-secure-change-in-production-32bytes!"
+      SECRET_KEY: "${SECRET_KEY:?SECRET_KEY is required — copy backend/.env.example to .env}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+      DEEPSEEK_API_KEY: "${DEEPSEEK_API_KEY:-}"
+      OLLAMA_BASE_URL: "${OLLAMA_BASE_URL:-http://localhost:11434}"
     depends_on:
       nexus-db:
         condition: service_healthy
@@ -36,11 +49,13 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: "http://localhost:8000/api/v1"
     container_name: nexus-nextjs-frontend
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_API_URL: "http://localhost:8000/api/v1"
+      BACKEND_URL: "http://nexus-backend:8000"
     depends_on:
       - nexus-backend
 

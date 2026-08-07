@@ -3,6 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.domain import MemoryEntry
 from app.services.hybrid_search import hybrid_search_engine
+from app.services.llm import embed_texts
 
 
 class MemoryService:
@@ -23,7 +24,7 @@ class MemoryService:
         value: str,
         confidence_score: float = 1.0
     ) -> MemoryEntry:
-        embedding = hybrid_search_engine.generate_mock_embedding(f"{key}: {value}")
+        embedding = (await embed_texts([f"{key}: {value}"]))[0]
         memory = MemoryEntry(
             workspace_id=workspace_id,
             user_id=user_id,
@@ -55,7 +56,7 @@ class MemoryService:
         if not memories:
             return []
 
-        query_emb = hybrid_search_engine.generate_mock_embedding(query)
+        query_emb = (await embed_texts([query]))[0]
         scored = []
         for m in memories:
             sim = hybrid_search_engine._cosine_similarity(query_emb, m.embedding_json or [])

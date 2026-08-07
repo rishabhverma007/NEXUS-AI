@@ -11,15 +11,24 @@ from fastapi.responses import JSONResponse
 from app.core.config import settings
 from app.core.db import engine, Base, AsyncSessionLocal
 from app.api.v1 import chat, knowledge, graph, workspace, memory
-from app.models.domain import Workspace, KnowledgeGraphEntity, KnowledgeGraphRelation, Document
+from app.models.domain import Workspace, KnowledgeGraphEntity, KnowledgeGraphRelation
 from app.services.doc_processor import doc_processor
 from app.services.memory_service import memory_service
+from app.seed_data import SEED_DOCUMENTS, SEED_ENTITIES, SEED_RELATIONS, SEED_MEMORIES
+from app.services.llm import (
+    is_embedding_configured,
+    is_model_available,
+    MODEL_REGISTRY,
+)
 
 
 async def seed_initial_workspace_data():
-    """Seed initial enterprise workspace data, GraphRAG nodes, and document chunks."""
+    """
+    Seed the default workspace with the enterprise corpus on first boot:
+    documents, knowledge graph entities/relations, and long-term memories.
+    """
     async with AsyncSessionLocal() as session:
-        # Check if default workspace exists
+        # Check if default workspace exists (fresh installs only)
         res = await session.get(Workspace, "ws_default_01")
         if not res:
             ws = Workspace(
@@ -30,97 +39,39 @@ async def seed_initial_workspace_data():
                 owner_id="user_dev_nexus_01"
             )
             session.add(ws)
+            await session.flush()
 
-            # Seed Knowledge Graph Entities
-            e1 = KnowledgeGraphEntity(
-                id="ent_01",
-                workspace_id="ws_default_01",
-                name="Multi-Agent Architecture",
-                entity_type="Concept",
-                description="Distributed agentic collaboration model with Router, RAG, Reflection, and Synthesis agents."
+            # Knowledge graph
+            session.add_all(
+                KnowledgeGraphEntity(workspace_id="ws_default_01", **ent)
+                for ent in SEED_ENTITIES
             )
-            e2 = KnowledgeGraphEntity(
-                id="ent_02",
-                workspace_id="ws_default_01",
-                name="GraphRAG Engine",
-                entity_type="Tool",
-                description="Sub-graph traversal engine combining NetworkX topology with pgvector semantic similarity."
-            )
-            e3 = KnowledgeGraphEntity(
-                id="ent_03",
-                workspace_id="ws_default_01",
-                name="pgvector Database",
-                entity_type="Database",
-                description="PostgreSQL vector extension for high-performance HNSW cosine distance semantic search."
-            )
-            e4 = KnowledgeGraphEntity(
-                id="ent_04",
-                workspace_id="ws_default_01",
-                name="Reflection Engine",
-                entity_type="Concept",
-                description="Factual consistency verification loop with hallucination score evaluation."
-            )
-            session.add_all([e1, e2, e3, e4])
-
-            # Seed Relations
-            r1 = KnowledgeGraphRelation(
-                id="rel_01",
-                workspace_id="ws_default_01",
-                source_entity_id="ent_01",
-                target_entity_id="ent_02",
-                relation_type="USES",
-                description="Multi-Agent Architecture leverages GraphRAG for entity relation reasoning."
-            )
-            r2 = KnowledgeGraphRelation(
-                id="rel_02",
-                workspace_id="ws_default_01",
-                source_entity_id="ent_02",
-                target_entity_id="ent_03",
-                relation_type="STORED_IN",
-                description="GraphRAG entity vector representations are indexed in pgvector."
-            )
-            r3 = KnowledgeGraphRelation(
-                id="rel_03",
-                workspace_id="ws_default_01",
-                source_entity_id="ent_01",
-                target_entity_id="ent_04",
-                relation_type="ENFORCES",
-                description="Multi-Agent Architecture enforces output quality via Reflection Engine."
-            )
-            session.add_all([r1, r2, r3])
-
-            await session.commit()
-
-            # Seed Document Content
-            await doc_processor.process_and_ingest_document(
-                session=session,
-                workspace_id="ws_default_01",
-                title="NEXUS AI Master Architecture Blueprint",
-                content="""
-# NEXUS AI Enterprise Specification
-
-NEXUS AI is built upon a hybrid Multi-Agent RAG architecture that unites:
-1. Dense Cosine Vector Embeddings stored in pgvector.
-2. Sparse BM25 Keyword Search with Reciprocal Rank Fusion (RRF).
-3. NetworkX Knowledge Graph (GraphRAG) with sub-graph traversal up to 2 hops.
-4. Reflection Engine evaluating factual correctness before emitting final SSE frames.
-
-## Security & Isolation
-Multi-tenant workspaces isolate document chunks, vector indices, and graph nodes per tenant workspace ID.
-                """,
-                source_type="markdown",
-                metadata={"category": "architecture", "author": "Principal Architect"}
+            session.add_all(
+                KnowledgeGraphRelation(workspace_id="ws_default_01", **rel)
+                for rel in SEED_RELATIONS
             )
 
-            # Seed Long-Term Memory
-            await memory_service.store_memory(
-                session=session,
-                workspace_id="ws_default_01",
-                user_id="user_dev_nexus_01",
-                memory_type="preference",
-                key="preferred_language",
-                value="TypeScript / Python with Strict Typing and Clean Architecture"
-            )
+            # Documents (real embedding when configured, mock otherwise)
+            for doc_in in SEED_DOCUMENTS:
+                await doc_processor.process_and_ingest_document(
+                    session=session,
+                    workspace_id="ws_default_01",
+                    title=doc_in["title"],
+                    content=doc_in["content"],
+                    source_type=doc_in.get("source_type", "markdown"),
+                    metadata=doc_in.get("metadata", {}),
+                )
+
+            # Long-term memory
+            for mem in SEED_MEMORIES:
+                await memory_service.store_memory(
+                    session=session,
+                    workspace_id="ws_default_01",
+                    user_id="user_dev_nexus_01",
+                    memory_type=mem["memory_type"],
+                    key=mem["key"],
+                    value=mem["value"],
+                )
 
             await session.commit()
 
@@ -143,12 +94,9 @@ app = FastAPI(
 )
 
 # Configure CORS
-# Allow any localhost/127.0.0.1 origin regardless of port, since the Next.js
-# dev server may bind to any free port (e.g. 3000, 53807, ...).
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.ALLOWED_ORIGINS,
-    allow_origin_regex=r"https?://((localhost|127\.0\.0\.1)|\[::1\])(:\d+)?",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -162,6 +110,53 @@ async def root_health_check():
         "system": settings.PROJECT_NAME,
         "version": settings.VERSION,
         "engine": "FastAPI + LangGraph + GraphRAG + pgvector"
+    }
+
+
+@app.get(f"{settings.API_V1_STR}/health")
+async def readiness_health_check():
+    """
+    Readiness probe: reports live vs simulation AI mode, per-model availability,
+    embedding mode, and database connectivity. Used by the frontend to show a
+    LIVE AI / Simulation badge and by deployments for readiness checks.
+    """
+    db_status = "ok"
+    try:
+        from sqlalchemy import text
+        async with engine.connect() as conn:
+            await conn.scalar(text("SELECT 1"))
+    except Exception:
+        db_status = "error"
+
+    model_status: dict = {}
+    for model_id in MODEL_REGISTRY:
+        model_status[model_id] = await is_model_available(model_id)
+
+    live_any = any(model_status.values())
+    # Only list providers whose models are actually reachable right now
+    # (a configured Ollama base URL alone does not mean the daemon is up).
+    providers = sorted(
+        {
+            entry["provider"]
+            for model_id, entry in MODEL_REGISTRY.items()
+            if model_status.get(model_id)
+        }
+    )
+
+    return {
+        "status": "ok" if db_status == "ok" else "degraded",
+        "system": settings.PROJECT_NAME,
+        "version": settings.VERSION,
+        "database": db_status,
+        "ai_mode": "live" if live_any else "simulation",
+        "providers_configured": providers,
+        "default_model": settings.DEFAULT_LLM_MODEL,
+        "models": model_status,
+        "embeddings": {
+            "mode": "live" if is_embedding_configured() else "mock",
+            "provider": settings.EMBEDDING_PROVIDER,
+            "model": settings.DEFAULT_EMBEDDING_MODEL,
+        },
     }
 
 

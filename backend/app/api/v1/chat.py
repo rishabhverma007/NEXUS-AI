@@ -76,7 +76,8 @@ async def stream_chat_response(
                 workspace_id=workspace_id,
                 user_id=user_id,
                 user_query=req.content,
-                agent_mode=req.agent_mode
+                agent_mode=req.agent_mode,
+                model=req.model or "gpt-4o",
             ):
                 event_data = json.dumps(event)
                 yield f"data: {event_data}\n\n"

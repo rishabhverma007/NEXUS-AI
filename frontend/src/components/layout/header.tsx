@@ -15,6 +15,7 @@ import { useNexusStore } from "@/stores/nexus-store";
 import { useNotifications } from "@/providers/notification-provider";
 import { AgentMode } from "@/types/nexus";
 import { cn } from "@/lib/utils";
+import { AiStatusBadge } from "./ai-status-badge";
 
 export function Header() {
   const {
@@ -85,6 +86,8 @@ export function Header() {
             ⌘K
           </kbd>
         </button>
+
+        <AiStatusBadge modelId={selectedModel} />
 
         <div className="relative">
           <select

@@ -9,6 +9,33 @@ import type {
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
+export interface HealthStatus {
+  status: string;
+  system: string;
+  version: string;
+  database: "ok" | "error";
+  ai_mode: "live" | "simulation";
+  providers_configured: string[];
+  default_model: string;
+  models: Record<string, boolean>;
+  embeddings: {
+    mode: "live" | "mock";
+    provider: string;
+    model: string;
+  };
+}
+
+/** Fetch the backend readiness probe (AI mode, per-model availability, DB). */
+export async function fetchHealth(): Promise<HealthStatus> {
+  const response = await fetch(`${API_BASE}/health`, {
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!response.ok) {
+    throw new Error(`Health check failed: ${response.status}`);
+  }
+  return (await response.json()) as HealthStatus;
+}
+
 interface StreamDoneData {
   citations: Citation[];
   reflection_score: number;

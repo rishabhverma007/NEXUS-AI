@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+nexus_ai.db
+.env
+.env.*
+!.env.example
+*.log
+tests/

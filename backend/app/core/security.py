@@ -38,7 +38,7 @@ def create_access_token(subject: Union[str, Any], workspace_id: str, role: str =
         "workspace_id": workspace_id,
         "role": role,
     }
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.effective_secret_key, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
 
@@ -47,7 +47,7 @@ async def get_current_user_payload(token: Optional[str] = Depends(oauth2_scheme)
         # Fallback default dev user payload if token is not provided in development mode
         return TokenPayload(sub="user_dev_nexus_01", workspace_id="ws_default_01", role="admin")
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(token, settings.effective_secret_key, algorithms=[settings.ALGORITHM])
         token_data = TokenPayload(**payload)
         if token_data.exp and datetime.fromtimestamp(token_data.exp, tz=timezone.utc) < datetime.now(timezone.utc):
             raise HTTPException(

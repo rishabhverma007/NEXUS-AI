@@ -6,7 +6,8 @@ const backendUrl = process.env.BACKEND_URL || "http://localhost:8000";
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  transpilePackages: ["three"],
+  output: "standalone", // lean Docker runtime image (see Dockerfile)
+  transpilePackages: ["three", "@react-three/fiber", "@react-three/drei"],
   async rewrites() {
     return [
       {

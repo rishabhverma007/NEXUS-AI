@@ -2,7 +2,7 @@ import math
 from typing import List, Dict, Any, Tuple
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.domain import Document, DocumentChunk
-from app.services.hybrid_search import hybrid_search_engine
+from app.services.llm import embed_texts
 
 
 class DocumentProcessor:
@@ -56,8 +56,11 @@ class DocumentProcessor:
         raw_chunks = self.chunk_text(content, chunk_size=300, chunk_overlap=30)
         chunks_to_add = []
 
+        # Real embeddings when a provider is configured; deterministic mock otherwise.
+        embeddings = await embed_texts(raw_chunks)
+
         for idx, chunk_str in enumerate(raw_chunks):
-            embedding = hybrid_search_engine.generate_mock_embedding(chunk_str)
+            embedding = embeddings[idx]
             token_est = int(len(chunk_str.split()) * 1.3)
             doc_chunk = DocumentChunk(
                 document_id=doc.id,

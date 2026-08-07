@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.domain import DocumentChunk
 from app.core.config import settings
+from app.services.llm import embed_texts, generate_mock_embedding
 
 
 class HybridSearchEngine:
@@ -19,16 +20,8 @@ class HybridSearchEngine:
         self.rrf_k = rrf_k
 
     def generate_mock_embedding(self, text: str, dim: int = 1536) -> List[float]:
-        """
-        Generates a deterministic normalized embedding vector for demonstration & local operation
-        when external API key is not present.
-        """
-        rng = np.random.RandomState(seed=abs(hash(text)) % (2**32))
-        vec = rng.randn(dim).astype(np.float32)
-        norm = np.linalg.norm(vec)
-        if norm > 0:
-            vec = vec / norm
-        return vec.tolist()
+        """Backwards-compatible alias for the shared mock embedding generator."""
+        return generate_mock_embedding(text, dim)
 
     def _cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
         a = np.array(vec1, dtype=np.float32)
@@ -61,7 +54,8 @@ class HybridSearchEngine:
         query_embedding: Optional[List[float]] = None
     ) -> List[Dict[str, Any]]:
         if not query_embedding:
-            query_embedding = self.generate_mock_embedding(query)
+            # Real embedding when configured; deterministic mock otherwise.
+            query_embedding = (await embed_texts([query]))[0]
 
         # 1. Fetch chunks from database for the workspace
         stmt = select(DocumentChunk).where(DocumentChunk.workspace_id == workspace_id)
